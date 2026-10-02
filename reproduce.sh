@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Usage: LLAMA_CPP_DIR=~/llama.cpp ./reproduce.sh gate|validate|bench|ppl|all
-# GPU commands run singly through scripts/gpu.sh; bench additionally pauses mpvpaper.
+# Usage: ./reproduce.sh gate|validate|bench|ppl|gate-tiers|multitoken|compaction|spec|schedules|all
+# GPU commands run singly through scripts/gpu.sh; timings additionally pause mpvpaper.
 set -euo pipefail
 cd "$(dirname "$0")"
 ROOT=$PWD
@@ -10,7 +10,7 @@ export PATH="$CUDA_HOME/bin:$PATH"
 PY="$ROOT/.venv/bin/python"
 LLAMA_COMMIT=6011c34ce6099646ccdf0d39a61c6e681477c178
 stage=${1:-all}
-case "$stage" in gate|validate|bench|ppl|all) ;; *) echo 'Usage: ./reproduce.sh gate|validate|bench|ppl|all' >&2; exit 2;; esac
+case "$stage" in gate|validate|bench|ppl|gate-tiers|multitoken|compaction|spec|schedules|all) ;; *) echo 'Usage: ./reproduce.sh gate|validate|bench|ppl|gate-tiers|multitoken|compaction|spec|schedules|all' >&2; exit 2;; esac
 
 # Cached artifacts are reused. Every missing artifact is built with the original driver.
 setup() {
@@ -93,7 +93,8 @@ weights() {
 }
 
 validate() {
-  for schedule in kernels/*/schedules/*.json; do
+  for schedule in kernels/*/schedules/*.json bench/lm23/schedules/*.json; do
+    [[ -f "$schedule" && "$(basename "$schedule")" != MANIFEST.json ]] || continue
     validator/target/release/schedcheck "$schedule"
   done
 }
@@ -156,23 +157,111 @@ ppl() {
   done
 }
 
-record_stage() {
-  local name=$1 begin=$SECONDS
-  shift
-  "$@"
-  local elapsed=$((SECONDS-begin))
-  printf '{"stage":"%s","wall_seconds":%s}\n' "$name" "$elapsed" >> publish/reproduction_times.jsonl
-  echo "reproduce.sh $name wall time: $elapsed s"
+# Package drivers retain their original output conventions. Archive just this
+# run's outputs, then restore the published evidence even when a command fails.
+capture_results() {
+  "$PY" scripts/reproduce_capture.py "$@"
 }
 
+mt_build() {
+  bash kernels/megakernel_mt3/build.sh selected
+  for m in 1 2 3 4 5; do
+    [[ -f "kernels/megakernel_mt2/libmt$m.so" ]] || bash kernels/megakernel_mt2/build.sh selected "$m"
+  done
+}
+
+references() {
+  [[ -f mutation/reference-0.6B.pt ]] || scripts/gpu.sh timeout 285 "$PY" mutation/gate.py prepare --model 0.6B
+  for prompt in 0 1 2; do
+    [[ -f "bench/lm14/reference-$prompt.pt" ]] || scripts/gpu.sh timeout 285 "$PY" bench/lm14/reference.py "$prompt"
+  done
+}
+
+gate_tiers() {
+  weights
+  mt_build
+  references
+  # Tier 3 is cumulative: both invocations execute and report tiers 1, 2 and 3.
+  scripts/gpu.sh timeout 285 "$PY" gate/run.py --engine v2 --tier 3 \
+    --output publish/reproduction/gate-tiers.jsonl
+  scripts/gpu.sh timeout 285 "$PY" gate/run.py --engine mt --m 4 --mode causal --tier 3 \
+    --lib kernels/megakernel_mt3/libmt4.so --output publish/reproduction/gate-tiers.jsonl
+}
+
+multitoken() {
+  weights
+  mt_build
+  references
+  capture_results bench/lm23/gate.json -- \
+    scripts/gpu.sh timeout 285 "$PY" bench/lm23/check_gate.py
+  capture_results bench/lm23/causal-128.json bench/lm23/results.jsonl -- \
+    scripts/gpu.sh --timing timeout 285 "$PY" bench/lm23/bench.py --ctx 128 --mode causal --samples 25
+}
+
+compaction() {
+  weights
+  bash kernels/megakernel_kvc/build.sh
+  [[ -f bench/lm24/reference.pt ]] || "$PY" bench/lm24/reference.py
+  capture_results bench/lm24/correctness.json -- \
+    scripts/gpu.sh timeout 285 "$PY" bench/lm24/check_correctness.py
+  capture_results bench/lm24/timing.json -- \
+    scripts/gpu.sh --timing timeout 285 "$PY" bench/lm24/bench.py --runs 25
+  capture_results bench/lm24/session.json -- \
+    scripts/gpu.sh --timing timeout 285 "$PY" bench/lm24/session.py
+}
+
+spec() {
+  weights
+  mt_build
+  # Fixed subset: code-00, rag-00, summarization-00, chat-00, full lengths,
+  # three rotating/reversing repeats. Never append this subset to the full corpus.
+  for category in code rag summarization chat; do
+    scripts/gpu.sh --timing timeout 285 "$PY" spec/run.py --category "$category" \
+      --start 0 --count 1 --repeats 3 --output publish/reproduction/spec.jsonl
+  done
+  "$PY" spec/analyze.py
+}
+
+schedules() {
+  capture_results bench/lm20/schedules.json -- "$PY" kernels/megakernel_attn/sched_mt.py
+  capture_results bench/lm23/schedules.json -- "$PY" kernels/megakernel_mt3/sched_mt.py
+  "$PY" kernels/megakernel_kvc/sched_gen.py
+  "$PY" scripts/schedule_manifest.py --check kernels/megakernel_attn/schedules \
+    bench/lm23/schedules kernels/megakernel_kvc/schedules
+}
+
+record_stage() (
+  local name=$1 begin=$SECONDS
+  shift
+  trap 'status=$?; elapsed=$((SECONDS-begin)); printf "{\"stage\":\"%s\",\"wall_seconds\":%s,\"exit_code\":%s,\"recorded_at\":\"%s\"}\n" "$name" "$elapsed" "$status" "$(date -u +%FT%TZ)" >> publish/reproduction_times.jsonl; echo "reproduce.sh $name wall time: $elapsed s (exit $status)"' EXIT
+  "$@"
+)
+
 start=$SECONDS
+mkdir -p publish/reproduction
 setup
 case "$stage" in
   validate) record_stage validate validate ;;
   gate) record_stage gate gate ;;
   bench) record_stage bench bench ;;
   ppl) record_stage ppl ppl ;;
-  all) record_stage gate gate; record_stage validate validate; record_stage bench bench; record_stage ppl ppl; record_stage charts "$PY" publish/make_charts.py ;;
+  gate-tiers) record_stage gate-tiers gate_tiers ;;
+  multitoken) record_stage multitoken multitoken ;;
+  compaction) record_stage compaction compaction ;;
+  spec) record_stage spec spec ;;
+  schedules) record_stage schedules schedules ;;
+  all)
+    record_stage gate gate
+    record_stage schedules schedules
+    record_stage validate validate
+    record_stage gate-tiers gate_tiers
+    record_stage multitoken multitoken
+    record_stage compaction compaction
+    record_stage spec spec
+    record_stage bench bench
+    record_stage ppl ppl
+    record_stage charts "$PY" publish/make_charts.py
+    ;;
 esac
 elapsed=$((SECONDS-start))
 if [[ "$stage" == all ]]; then

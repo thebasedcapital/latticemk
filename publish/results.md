@@ -56,9 +56,75 @@ Both gates use the same forced token sequence for reference and kernel, 64 steps
 | 1.7B fp16 dot accumulation | Original half partials produced max finite logit diff 24.6176 and 21 nonfinite steps; timed fp32 accumulation passed without spills. | `bench/lm12/gate_v21.json`, `fp16_dot_diagnostic`, `first`; `reports/wave-5/LM-12.md` |
 | Stock ExLlamaV2 0.3.2 Qwen3 | Q/K head norm treated as LayerNorm and SDPA multi-token prefill lacked causal masking; first-window PPL 59.498, then 9.63618 with both config overrides. | `reports/wave-5/LM-13.md`, `bench/lm13/ppl.py` |
 
+## Waves 6-7: mutation power and gate tiers
+
+The base logit gate missed real faults. Extra probes helped, but a tolerance check against HF cannot distinguish every small single-layer bug from legitimate arithmetic changes. The cumulative gate now adds race/conditional probes, calibrated per-layer comparisons, and optional bitwise regression against the last accepted library. Regression is appropriate only for changes declared numerics-preserving.
+
+| Check | Result | Source and selector |
+|---|---|---|
+| Mutation campaign, Qwen3-0.6B | Base gate kills 72.1%; with extra tests 89.1%; 22 non-equivalent mutants survive | `mutation/results.jsonl`, last row per `mutant_id`, `model="0.6B"`, exclude `family="control"`, equivalent and compile-failure rows; `mutation/summarize.py`, `status(..., "gpu_stage")` versus `status(..., "stage")` |
+| Mutation campaign, Qwen3-1.7B | Base gate kills 71.9%; with extra tests 83.3%; 19 non-equivalent mutants survive | Same source and deduplication, `model="1.7B"` |
+| Originals through cumulative tiers | 12/12 pass, including self-baseline regression | `gate/validation-originals.jsonl`, `gate.protocol="lm17-three-tier-fullchain-v1"`, latest `(engine,m,repeat)` for engines `v2`, `scale`, `mt` and the recorded M values; `gate.pass` |
+| Known survivors, layer-only check | 34/41 rejected, 82.9%; 7 missed | `gate/campaign-results.jsonl`, latest `index` with `regression_enabled=true`, `cohort="survivor"`; `gate.tiers.3.layers.pass` |
+| Known survivors, bitwise regression | 41/41 rejected | Same cohort; `gate.tiers.3.regression.pass` |
+| Previously killed controls | 30/30 still rejected | Same deduplication, `cohort="previous-kill"`; `gate.pass` |
+
+The layer-only misses include rounding changes inside calibrated envelopes, lm_head-only faults outside the dumps, and a position-dependent fault outside the layer probe. Exact regression catches this cohort, but cannot validate an intentional arithmetic change. Package reports: [LM-16](../reports/wave-6/LM-16.md) and [LM-17](../reports/wave-7/LM-17.md). The PPT feasibility package produced no accuracy result; its faithful run was compute-blocked, not an accuracy failure. See [LM-19](../reports/wave-7/LM-19.md) and `ppt/results.jsonl`, which is empty.
+
+## Waves 6-8: multi-token trajectory
+
+The pass-time target was M=4 at no more than 1.5x M=1, defined in [wave 6, gate decision](../reports/wave-6.md#1-gate-decision) and retained in [wave 8, gate decision](../reports/wave-8.md#1-gate-decision). No measured context met it. The table uses committed result files, not the separate integrator repetitions in the wave reports.
+
+| Kernel / mode | Context | M4/M1 time | Decision | Source and selector |
+|---|---:|---:|---|---|
+| Wave 6 mt, batch | 128 | 2.56x | Miss | `bench/lm14/decision-128.json`, `context`, `t_over_t1.batch.4`, `kill` |
+| Wave 7 mt2, batch | 128 | 2.19x | Miss | `bench/lm18/decision-128.json`, `context`, `t_over_t1.batch.4`, `kill` |
+| Wave 8 mt3, batch | 128 | 1.83x | Miss | `bench/lm23/analysis.json`, `ratios[mode="batch",context=128].mt3_m4_over_m1`, `target_met` |
+| Wave 8 mt3, causal | 128 | 1.89x | Miss | Same `ratios`, `mode="causal",context=128` |
+| Wave 8 mt3, causal | 2048 | 2.46x | Miss | Same `ratios`, `mode="causal",context=2048` |
+| Wave 8 mt3, causal | 8192 | 2.81x | Miss | Same `ratios`, `mode="causal",context=8192` |
+| Wave 8 mt3, batch | 2048 | 3.28x | Miss | Same `ratios`, `mode="batch",context=2048` |
+
+The merged kernel keeps sequential exactness in both modes for M=1 through M=5. All entries in `bench/lm23/gate.json` have `pass_gate=true`, `max_diff_sequential=0.0`, and `bitwise_repeat=true`; the largest `max_diff_hf` is 0.1875. Cumulative gate records are in `bench/lm23/tiers.jsonl` and `contract-tiers.jsonl`. The merge parallelized attention and per-column work, not the GEMM. The tensor-core experiment was rejected because it broke sequential exactness. Package reports: [LM-14](../reports/wave-6/LM-14.md), [LM-18](../reports/wave-7/LM-18.md), [LM-20](../reports/wave-8/LM-20.md), [LM-21](../reports/wave-8/LM-21.md), [LM-22](../reports/wave-8/LM-22.md), and [LM-23](../reports/wave-8/LM-23.md).
+
+For a causal pass with one anchor and three drafts, the derived break-even accepted-draft means are strictly above 0.89 / 1.46 / 1.81 at contexts 128 / 2048 / 8192. Source: `bench/lm23/analysis.json`, `breakeven[k=4,context=128|2048|8192].mandatory_anchor_plus_bonus_min_accepted_drafts_strictly_greater_than`. These assume negligible CPU drafting and omit host/rollback overhead. They are not measured end-to-end speedups or thresholds for the adaptive policy below.
+
+## Wave 8: turn-aware KV compaction
+
+Compaction evicts complete turns and preserves logical positions while shortening the physical live cache. It changes the retained context, so it is not lossless full-history compression or an answer-quality result. See the [LM-24 package report](../reports/wave-8/LM-24.md).
+
+| Measurement | Before | After | Change | Source and selector |
+|---|---:|---:|---:|---|
+| Decode with logical context 8192 | 8192 live rows, 216.4 tok/s | 2048 live rows, 405.8 tok/s | +87.6% throughput | `bench/lm24/timing.json`, `decode[name="v2-long"]` and `decode[name="kvc-compacted"]`, `logical`, `physical`, `tokens_per_s`; derived ratio |
+| Session of 16384 tokens, including 8 compactions | 79.3 s | 44.8 s | 1.77x | `bench/lm24/session.json`, `tokens`, `compactions`, `totals_wall_s.v2-extended`, `totals_wall_s.kvc`, `speedup` |
+| Copy cost for retaining 1024 / 2048 rows | n/a | 1.28 / 2.56 ms GPU time | Host wall time is separate | `bench/lm24/timing.json`, `copies[retained=1024|2048].gpu_ms` |
+| Decode versus short-cache v2 | v2 at 2048 rows | Compacted cache at 2048 rows | 0.999x throughput | `bench/lm24/timing.json`, `compact_ratio` |
+| No-compaction control | Original v2 logits | Bitwise unchanged | 0.993-0.995x throughput | `bench/lm24/timing.json`, `bitwise_no_compaction`, `no_event_ratios` |
+
+The masked-HF correctness run covers 384 steps and two evictions, not the whole session. It reaches max logit error 0.1904 within bound 0.2158, repeats bitwise, and reports one near-tie flip. Source: `bench/lm24/correctness.json`, `no_events_steps`, `cases[repeat=0].events`, `.max_diff`, `.bound`, `.bitwise_repeat`, `.flips`. The long-session result proves timing and finite execution, not full-session agreement with HF: `bench/lm24/session.json`, `finite`, `extended_baseline_bitwise`. Final physical cache length is 4608 at logical position 16384, from `final_physical` and `final_logical`; the live cache is not fixed at its post-compaction length throughout the session.
+
+## Wave 9: lossless prompt-lookup speculation
+
+CPU longest-suffix lookup drafts tokens from the prompt and accepted output. The unchanged mt3 causal kernel verifies them; logical-position rollback hides rejected cache rows. Decode wall time includes drafting, index maintenance, host/device copies, synchronization and rollback. It excludes loading and prompt prefill, so this is not full-request latency. See the [LM-25 package report](../reports/wave-9/LM-25.md).
+
+| Category | v2 tok/s | Speculative tok/s | Speedup, 95% prompt-bootstrap CI | Accepted drafts/pass | Verdict |
+|---|---:|---:|---|---:|---|
+| Code edits | 457.3 | 645.7 | 1.412x [1.252, 1.565] | 1.595 | Ship for evaluated workload |
+| RAG-style answers | 453.4 | 650.9 | 1.436x [1.322, 1.563] | 1.753 | Ship for evaluated workload |
+| Summarization | 453.9 | 417.0 | 0.919x [0.878, 0.975] | 0.445 | Disable |
+| Open continuation control | 456.7 | 539.3 | 1.181x [1.087, 1.301] | 1.051 | Repetitive-text caveat |
+
+Every table number comes from `spec/analysis.json`, `categories.code|rag|summarization|chat`, selecting `throughput_tps.v2`, `throughput_tps.spec`, `speedup_v2`, `speedup_v2_ci95`, and `mean_accepted`. Raw timing and acceptance traces are in `spec/results.jsonl`, selected by `category`, `id`, and nested `runs[].repeat` / `runs[].variant`. Aggregation uses total output tokens divided by summed per-prompt mean wall time. The confidence intervals resample paired prompts, not independent repeats.
+
+Each category has 20 prompts and three repeats: `spec/analysis.json`, `categories.*.prompts` and `.repeats`. The CI procedure uses 10000 prompt resamples with seed 25, from `bootstrap_prompt_resamples` and `seed`. The shipping rule requires at least 1.15x versus v2 with CI lower bound strictly above 1.0, defined in [LM-25, gate decision](../reports/wave-9/LM-25.md#gate-decision-and-status). Code and RAG clear it; summarization slows down.
+
+Lossless means identical to the same-build mt3 M=1 greedy target, **not v2**. All 80 prompts and 240 repeat pairs match that target: `spec/analysis.json`, `identity_reference`, `identity_prompts_passed`, `identity_repeat_pairs_passed`; raw `spec/results.jsonl`, `runs[variant="spec"].identity_mt1` and `runs[].tokens`. V2 and mt3 diverge on 11 prompts, from `v2_diverged_prompts`; `spec/divergence.jsonl` records each first divergence. The original v2 identity requirement failed and was corrected rather than hidden. V2 remains the speed baseline.
+
+The `chat` key labels open continuation, not instruct-style chat. Its mean repeated generated four-gram fraction is 41.78%, from `spec/analysis.json`, `categories.chat.output_repeated_fourgram_fraction_mean`. Repetition inflates lookup acceptance; the control's speedup is not evidence of a general chat gain. Greedy decoding only was evaluated. No long-session compaction/speculation combination or long-context speculative speedup is claimed.
+
 ## Reproduction wall time
 
-`./reproduce.sh all` completed on the machine above using cached checkpoints and packed GPTQ weights. Stage times are wall seconds, including GPU-lock waits and per-stage setup where applicable. The build/download setup sits in the overall time rather than in a stage. These are not estimates of a fresh calibration run.
+The original waves 1-5 `./reproduce.sh all` run completed using cached checkpoints and packed GPTQ weights. The table below describes that historical command, not a run of the newly extended `all`. Stage times are wall seconds, including GPU-lock waits and per-stage setup where applicable. Build/download setup sits in the overall time rather than in a stage. These are not fresh-checkout calibration estimates. The waves 6-9 stage runs and remaining scope are recorded in [the wrap-up run log](WRAPUP.md).
 
 | Stage | Wall seconds | Source |
 |---|---:|---|
@@ -66,7 +132,18 @@ Both gates use the same forced token sequence for reference and kernel, 64 steps
 | Static validation, all schedule families | 0 (whole-second timer) | `publish/reproduction_times.jsonl`, `validate` |
 | Paired benchmarks, both sizes and all contexts | 83 | `publish/reproduction_times.jsonl`, `bench` |
 | WikiText-2 perplexity | 536 | `publish/reproduction_times.jsonl`, `ppl` |
-| Four charts | 2 | `publish/reproduction_times.jsonl`, `charts` |
-| End-to-end command | 716 | `publish/reproduction_times.jsonl`, `all` |
+| Original four charts | 2 | `publish/reproduction_times.jsonl`, first `charts` row |
+| Original waves 1-5 end-to-end command | 716 | `publish/reproduction_times.jsonl`, first `all` row |
 
-Charts: [speed](charts/speed_vs_llamacpp.png), [quality/speed](charts/ppl_vs_speed.png), [experiments](charts/waves.png), [byte-model roofline](charts/roofline.png). Regenerate from recorded rows with `.venv/bin/python publish/make_charts.py`.
+The new stages each completed on cached artifacts. These are stage-body wall seconds, including builds inside the stage and GPU-lock waits but excluding the common setup. Sources select the latest row for each stage in `publish/reproduction_times.jsonl`. These separate invocations do not establish a new end-to-end `all` wall time.
+
+| New stage | Wall seconds | Exit code | Source |
+|---|---:|---:|---|
+| Schedule regeneration and manifest checks | 13 | 0 | `publish/reproduction_times.jsonl`, latest `schedules` |
+| Cumulative gates, v2 and mt3 causal M=4 | 102 | 0 | `publish/reproduction_times.jsonl`, latest `gate-tiers` |
+| Multi-token correctness and short timing | 52 | 0 | `publish/reproduction_times.jsonl`, latest `multitoken` |
+| Compaction correctness, timing and session | 157 | 0 | `publish/reproduction_times.jsonl`, latest `compaction` |
+| Fixed speculative subset and full analysis | 44 | 0 | `publish/reproduction_times.jsonl`, latest `spec` |
+| Seven charts from recorded data | 3.339 | 0 | `publish/reproduction_times.jsonl`, latest `charts` |
+
+Charts: [speed](charts/speed_vs_llamacpp.png), [quality/speed](charts/ppl_vs_speed.png), [experiments](charts/waves.png), [byte-model roofline](charts/roofline.png), [multi-token trajectory](charts/multitoken.png), [KV compaction](charts/compaction.png), and [speculative decoding](charts/speculative.png). Regenerate from recorded rows with `.venv/bin/python publish/make_charts.py`.

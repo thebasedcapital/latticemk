@@ -7,7 +7,7 @@ Package report: `reports/wave-9/LM-25.md`.
 
 | gate | decision | one line |
 |---|---|---|
-| Kill line: some category >= 1.15x over v2 with CI lower bound > 1.0 | **pass** | code 1.41x [1.25, 1.57], RAG 1.44x [1.32, 1.56] |
+| Kill line: some category >= 1.15x over v2 with CI lower bound > 1.0 | **pass** | code 1.41x [1.25, 1.56], RAG 1.44x [1.32, 1.56] |
 | Lossless output (vs its own target, mt3 M=1 greedy) | **pass** | 80/80 prompts, 240/240 repeat pairs identical |
 | Ship per category | code, RAG: **ship**; summarization: **disable** (0.92x) | continuation control 1.18x, but its text is repetitive |
 
@@ -28,7 +28,7 @@ derived, spec/analyze.py]`:
 
 | category | v2 tok/s | speculative tok/s | speedup [95% CI] | accepted drafts per pass | verdict |
 |---|---|---|---|---|---|
-| code edits | 457.3 | 645.7 | 1.41x [1.25, 1.57] | 1.60 | ship |
+| code edits | 457.3 | 645.7 | 1.41x [1.25, 1.56] | 1.60 | ship |
 | RAG-style answers | 453.4 | 650.9 | 1.44x [1.32, 1.56] | 1.75 | ship |
 | summarization | 453.9 | 417.0 | 0.92x [0.88, 0.98] | 0.44 | disable |
 | open continuation (control) | 456.7 | 539.3 | 1.18x [1.09, 1.30] | 1.05 | see negatives |

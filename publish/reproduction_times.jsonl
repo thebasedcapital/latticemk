@@ -6,3 +6,10 @@
 {"stage":"all","wall_seconds":716}
 {"stage":"validate","wall_seconds":0}
 {"stage":"validate","wall_seconds":0}
+{"stage":"schedules","wall_seconds":13,"exit_code":0,"recorded_at":"2026-10-02T16:25:24Z"}
+{"stage":"gate-tiers","wall_seconds":103,"exit_code":0,"recorded_at":"2026-10-02T16:27:43Z"}
+{"stage":"multitoken","wall_seconds":52,"exit_code":0,"recorded_at":"2026-10-02T16:29:02Z"}
+{"stage":"compaction","wall_seconds":157,"exit_code":0,"recorded_at":"2026-10-02T16:32:01Z"}
+{"stage":"spec","wall_seconds":44,"exit_code":0,"recorded_at":"2026-10-02T16:33:04Z"}
+{"stage":"charts","wall_seconds":3.339,"exit_code":0,"recorded_at":"2026-10-02T16:33:42.724562Z"}
+{"stage":"gate-tiers","wall_seconds":102,"exit_code":0,"recorded_at":"2026-10-02T16:35:23Z"}

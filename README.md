@@ -15,6 +15,10 @@ On the Quadro RTX 4000, the GPTQ INT4-g128 decode megakernel outpaced llama.cpp 
 
 The abandoned ideas matter here. Lattice weight codes could not meet INT4 error at the hoped-for rate, the first persistent kernel lost to CUDA graphs, and compressed KV plus finer synchronization both slowed v2 down. The occupancy fix was the one that stuck. See [sourced tables](publish/results.md) and the [speed](publish/charts/speed_vs_llamacpp.png), [quality/speed](publish/charts/ppl_vs_speed.png), [experiment](publish/charts/waves.png), and [byte-model roofline](publish/charts/roofline.png) charts.
 
+Turn-aware KV compaction raised decode from 216.4 to 405.8 tokens/s by reducing 8192 live rows to 2048, a +87.6% gain. A 16384-token session including eight compactions fell from 79.3 to 44.8 s, 1.77x. These are cache-eviction timings, not a full-history quality guarantee. Sources: `bench/lm24/timing.json`, `decode[name="v2-long"|"kvc-compacted"]`; `bench/lm24/session.json`, `tokens`, `compactions`, `totals_wall_s`, `speedup`; [details](publish/results.md#wave-8-turn-aware-kv-compaction), [chart](publish/charts/compaction.png).
+
+CPU prompt-lookup speculation reached 1.412x [1.252, 1.565] on code and 1.436x [1.322, 1.563] on RAG versus v2. Summarization lost at 0.919x; the continuation control is repetitive, not evidence of a chat gain. Output is lossless to mt3 M=1 greedy, not v2. Sources: `spec/analysis.json`, `categories.code|rag|summarization.speedup_v2`, `.speedup_v2_ci95`, `identity_reference`; [details](publish/results.md#wave-9-lossless-prompt-lookup-speculation), [chart](publish/charts/speculative.png).
+
 ## Quickstart
 
 Use a Turing sm_75 CUDA 13.3 host with Python, Rust, CMake and a CUDA compiler. Set `LLAMA_CPP_DIR` to a llama.cpp checkout at commit `6011c34ce6099646ccdf0d39a61c6e681477c178`, or leave it unset and let the script clone that commit into `~/llama.cpp`. The script builds its CUDA backend with `-DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=75`, `-allow-unsupported-compiler`, and headers and libraries from the `nvidia-cublas==13.3.0.5` wheel because the local CUDA toolkit lacked cuBLAS. It downloads Qwen3-0.6B-Base, Qwen3-1.7B-Base and WikiText-2, then reuses cached GPTQ weights if available.
@@ -23,7 +27,23 @@ Use a Turing sm_75 CUDA 13.3 host with Python, Rust, CMake and a CUDA compiler. 
 ./reproduce.sh all
 ```
 
-For shorter runs use `./reproduce.sh gate`, `validate`, `bench`, or `ppl`. Each GPU job uses `scripts/gpu.sh`, with `--timing` for benchmarks; the commands can take substantial time when calibration and model downloads are uncached. `all` also regenerates the charts; `.venv/bin/python publish/make_charts.py` regenerates charts alone from the recorded JSONL/JSON data.
+For shorter runs, select a stage:
+
+| Command | Scope |
+|---|---|
+| `./reproduce.sh gate` | Original correctness gates |
+| `./reproduce.sh gate-tiers` | Cumulative gate tiers on accepted kernels |
+| `./reproduce.sh multitoken` | Accepted mt3 correctness and multi-token timings |
+| `./reproduce.sh compaction` | KV compaction correctness, timings and session |
+| `./reproduce.sh spec` | Fixed speculative subset described below |
+| `./reproduce.sh schedules` | Regenerate and validate static schedules |
+| `./reproduce.sh validate` | Validate generated schedule JSONs |
+| `./reproduce.sh bench` / `ppl` | Paired baseline timing / WikiText-2 quality |
+| `./reproduce.sh all` | Run the reproduction stages and regenerate analysis/charts |
+
+The speculative reproduction subset uses the first prompt in each category, code, RAG, summarization and `chat`, with three interleaved repeats. `chat` is the open-continuation control, not instruct chat. Selection is equivalent to `spec/run.py --category <category> --start 0 --count 1 --repeats 3`, using `spec/prompts.jsonl`, `category` and file order. It writes `publish/reproduction/spec.jsonl` separately from the committed full run in `spec/results.jsonl`. The subset is a runtime/identity check, not a replacement for the category estimates or CIs.
+
+Analysis and charts regenerate from the committed full data, including `spec/analyze.py` over `spec/results.jsonl`; subset output must not overwrite it. Each GPU job uses `scripts/gpu.sh`, with `--timing` for benchmarks. Calibration and model downloads can take substantial time when uncached. `.venv/bin/python publish/make_charts.py` regenerates charts alone from recorded JSONL/JSON data. These commands describe the reproduction interface; the result tables above remain sourced to the recorded research runs.
 
 ## Layout
 
