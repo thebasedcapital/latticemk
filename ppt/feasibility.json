@@ -1,0 +1,463 @@
+{
+  "decision": "undecided: compute-blocked",
+  "completed_ppt_problems": 0,
+  "measured_counts": {
+    "generated": 197305,
+    "prefill": 262429,
+    "decode_steps": 288970,
+    "wall_seconds": 3476.0195526099415
+  },
+  "cumulative_mean_generated_tokens_per_second": 56.76176356713964,
+  "measured_complete_stages": [
+    {
+      "stage": 5,
+      "generated": 24727,
+      "prefill": 32691,
+      "seconds": 316.26536366704386,
+      "generated_tokens_per_second": 78.18434403721793
+    },
+    {
+      "stage": 6,
+      "generated": 32622,
+      "prefill": 36085,
+      "seconds": 542.4678098969744,
+      "generated_tokens_per_second": 60.136287176552614
+    },
+    {
+      "stage": 7,
+      "generated": 33268,
+      "prefill": 45276,
+      "seconds": 700.5193816599785,
+      "generated_tokens_per_second": 47.49047759559033
+    },
+    {
+      "stage": 8,
+      "generated": 40321,
+      "prefill": 49133,
+      "seconds": 912.3433172729565,
+      "generated_tokens_per_second": 44.19498585304669
+    }
+  ],
+  "continuation_charged_seconds": 3600.0009735118947,
+  "chunk_accounting_note": "Charged wall time conservatively includes lock waits and model reloads; checkpoint counters exclude unsaved in-flight work after OOM/hard timeout.",
+  "meaningful_full_vocabulary_scoring_positions": 197305,
+  "meaningful_normalizer_reductions": 1183830,
+  "scoring_definition": "One full-vocabulary log_softmax and six logsumexp reductions per generated position. Idle batch rows add wasted evaluations not included here. No separate scoring-model pass.",
+  "rounds_completed": 83,
+  "projected_complete_tokens": 672603.1713686343,
+  "projected_complete_prefill_tokens": 841738.5964265047,
+  "projected_complete_seconds": 14230.59186877844,
+  "extrapolation": {
+    "tag": "derived",
+    "assumptions": "Observed terminal/open pattern stays fixed; regenerated suffix length equals current terminal length or new stage horizon; saved elapsed time plus remaining tokens at last fully measured microbatched stage throughput, or cumulative mean if unavailable",
+    "observed_lengths": [
+      286,
+      1728,
+      1728,
+      1728,
+      1728,
+      1728
+    ],
+    "observed_terminal": [
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "remaining_stages": [
+      {
+        "stage": 9,
+        "horizon": 1728,
+        "local_rounds": 7,
+        "expected_generated_tokens": 30423.754050925923,
+        "expected_prefill_tokens": 32954.85358796296
+      },
+      {
+        "stage": 10,
+        "horizon": 1920,
+        "local_rounds": 10,
+        "expected_generated_tokens": 49198.75520833333,
+        "expected_prefill_tokens": 60838.026041666664
+      },
+      {
+        "stage": 11,
+        "horizon": 2112,
+        "local_rounds": 10,
+        "expected_generated_tokens": 53979.32291666667,
+        "expected_prefill_tokens": 66569.11458333333
+      },
+      {
+        "stage": 12,
+        "horizon": 2304,
+        "local_rounds": 10,
+        "expected_generated_tokens": 58763.129340277774,
+        "expected_prefill_tokens": 72305.02170138889
+      },
+      {
+        "stage": 13,
+        "horizon": 2496,
+        "local_rounds": 10,
+        "expected_generated_tokens": 63549.42708333333,
+        "expected_prefill_tokens": 78044.63541666667
+      },
+      {
+        "stage": 14,
+        "horizon": 2688,
+        "local_rounds": 10,
+        "expected_generated_tokens": 68337.68229166667,
+        "expected_prefill_tokens": 83787.16145833333
+      },
+      {
+        "stage": 15,
+        "horizon": 2880,
+        "local_rounds": 10,
+        "expected_generated_tokens": 73127.50347222222,
+        "expected_prefill_tokens": 89532.01736111111
+      },
+      {
+        "stage": 16,
+        "horizon": 3072,
+        "local_rounds": 10,
+        "expected_generated_tokens": 77918.59700520833,
+        "expected_prefill_tokens": 95278.76627604167
+      }
+    ],
+    "projected_complete_tokens": 672603.1713686343,
+    "projected_complete_seconds": 14230.59186877844,
+    "warning": "Not an upper/lower bound. Future EOS changes and longer-context cost can change it."
+  },
+  "per_stage_measured_milestones": [
+    {
+      "stage": 3,
+      "round": 7,
+      "generated": 46898,
+      "prefill": 69793,
+      "decode_steps": 77716,
+      "wall_seconds": 618.1031699840096
+    },
+    {
+      "stage": 4,
+      "round": -1,
+      "generated": 52825,
+      "prefill": 76806,
+      "decode_steps": 88169,
+      "wall_seconds": 687.4311116299941,
+      "lengths": [
+        284,
+        768,
+        768,
+        768,
+        768,
+        768
+      ],
+      "terminals": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "stage": 5,
+      "round": -1,
+      "generated": 77552,
+      "prefill": 109497,
+      "decode_steps": 130183,
+      "wall_seconds": 1003.696475297038,
+      "lengths": [
+        287,
+        960,
+        960,
+        960,
+        960,
+        960
+      ],
+      "terminals": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "stage": 6,
+      "round": -1,
+      "generated": 110174,
+      "prefill": 145582,
+      "decode_steps": 176339,
+      "wall_seconds": 1546.1642851940123,
+      "lengths": [
+        286,
+        1152,
+        1152,
+        1152,
+        1152,
+        1152
+      ],
+      "terminals": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "stage": 7,
+      "round": -1,
+      "generated": 143442,
+      "prefill": 190858,
+      "decode_steps": 216393,
+      "wall_seconds": 2246.683666853991,
+      "lengths": [
+        288,
+        1344,
+        1344,
+        1344,
+        1344,
+        1344
+      ],
+      "terminals": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "stage": 8,
+      "round": -1,
+      "generated": 183763,
+      "prefill": 239991,
+      "decode_steps": 271728,
+      "wall_seconds": 3159.0269841269474,
+      "lengths": [
+        1536,
+        286,
+        1536,
+        1536,
+        1536,
+        1536
+      ],
+      "terminals": [
+        false,
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  ],
+  "engines": {
+    "hf_fp16": {
+      "tokens_per_second": 47.26459570837027,
+      "tag": "derived blended rate: saved elapsed time plus remaining work at last measured complete microbatched stage; includes prefill/scoring runtime",
+      "ppt_gpu_hours_for_100": 395.2942185771789,
+      "ppt_gpu_hours_for_200": 790.5884371543578
+    },
+    "batch_06_m4": {
+      "tokens_per_second": 977.0,
+      "tag": "measured wave-6 at context128; projection ignores prefill and normalizers",
+      "ppt_gpu_hours_for_100": 19.123256322319868,
+      "ppt_gpu_hours_for_200": 38.246512644639736,
+      "all_matched_compute_groups_gpu_hours_for_100": 95.61628161159933,
+      "all_matched_compute_groups_gpu_hours_for_200": 191.23256322319867,
+      "all_groups_assumption": "Five equal token budgets: PPT, standard/BoN/vote shared pool, low-temperature, repeated greedy, single-chain. Same throughput assumed for every group; prefill, cache handling and scoring differences excluded."
+    },
+    "batch_06_m5": {
+      "tokens_per_second": 1000.0,
+      "tag": "measured wave-6 at context128; projection ignores prefill and normalizers",
+      "ppt_gpu_hours_for_100": 18.68342142690651,
+      "ppt_gpu_hours_for_200": 37.36684285381302,
+      "all_matched_compute_groups_gpu_hours_for_100": 93.41710713453254,
+      "all_matched_compute_groups_gpu_hours_for_200": 186.8342142690651,
+      "all_groups_assumption": "Five equal token budgets: PPT, standard/BoN/vote shared pool, low-temperature, repeated greedy, single-chain. Same throughput assumed for every group; prefill, cache handling and scoring differences excluded."
+    },
+    "batch_17_m4": {
+      "tokens_per_second": 422.1396474248185,
+      "tag": "derived, 0.6B batch throughput times 1.7B/0.6B single-stream ratio250/578.6",
+      "ppt_gpu_hours_for_100": 44.2588644323771,
+      "ppt_gpu_hours_for_200": 88.5177288647542,
+      "all_matched_compute_groups_gpu_hours_for_100": 221.2943221618855,
+      "all_matched_compute_groups_gpu_hours_for_200": 442.588644323771,
+      "all_groups_assumption": "Five equal token budgets: PPT, standard/BoN/vote shared pool, low-temperature, repeated greedy, single-chain. Same throughput assumed for every group; prefill, cache handling and scoring differences excluded."
+    },
+    "batch_17_m5": {
+      "tokens_per_second": 432.0774282751469,
+      "tag": "derived, same ratio; batch1.7B not ported",
+      "ppt_gpu_hours_for_100": 43.24091055043243,
+      "ppt_gpu_hours_for_200": 86.48182110086486,
+      "all_matched_compute_groups_gpu_hours_for_100": 216.20455275216216,
+      "all_matched_compute_groups_gpu_hours_for_200": 432.4091055043243,
+      "all_groups_assumption": "Five equal token budgets: PPT, standard/BoN/vote shared pool, low-temperature, repeated greedy, single-chain. Same throughput assumed for every group; prefill, cache handling and scoring differences excluded."
+    }
+  },
+  "controls": [
+    {
+      "method": "standard",
+      "n": 2,
+      "calibration_budget_per_problem": 256.0,
+      "measured_prefill_tokens_per_problem": 187.0,
+      "measured_seconds_per_problem": 7.996023168001557,
+      "measured_tokens_per_second": 32.015915239523,
+      "natural_single_output_pilots": [
+        {
+          "model": "1.7B",
+          "method": "standard",
+          "task": "gsm8k",
+          "problem": 566,
+          "gold": "1E+1",
+          "answer": null,
+          "correct": false,
+          "text": ".slfdslf\n\n.slfslf\n\n.slfsldf\n\n.slfsldf\n.slfslf",
+          "generated": 22,
+          "prefill": 71,
+          "wall_seconds": 1.043653553002514,
+          "returned_tokens": 22,
+          "terminal": true
+        },
+        {
+          "model": "1.7B",
+          "method": "standard",
+          "task": "gsm8k",
+          "problem": 228,
+          "gold": "1",
+          "answer": null,
+          "correct": false,
+          "text": ".destroy\n.debugLine",
+          "generated": 4,
+          "prefill": 90,
+          "wall_seconds": 0.12413055798970163,
+          "returned_tokens": 4,
+          "terminal": true
+        }
+      ],
+      "matched_partial_budget_tokens": 197305,
+      "derived_matched_partial_seconds": 6162.7162154787,
+      "derived_matched_complete_seconds": 21008.40055130829,
+      "caveat": "256-token independent controls and 8192-token single-chain calibrations use batch1. Full independent controls allocate up to6 requests but execute microbatches of2 above horizon768; matched cost extrapolation is not a measured full matched run."
+    },
+    {
+      "method": "low_temperature",
+      "n": 2,
+      "calibration_budget_per_problem": 256.0,
+      "measured_prefill_tokens_per_problem": 125.5,
+      "measured_seconds_per_problem": 7.82972855301341,
+      "measured_tokens_per_second": 32.6958972161907,
+      "natural_single_output_pilots": [
+        {
+          "model": "1.7B",
+          "method": "low_temperature",
+          "task": "gsm8k",
+          "problem": 566,
+          "gold": "1E+1",
+          "answer": null,
+          "correct": false,
+          "text": "paque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\npaque\n",
+          "generated": 3072,
+          "prefill": 71,
+          "wall_seconds": 94.80548958398867,
+          "returned_tokens": 3072,
+          "terminal": false
+        },
+        {
+          "model": "1.7B",
+          "method": "low_temperature",
+          "task": "gsm8k",
+          "problem": 228,
+          "gold": "1",
+          "answer": "1",
+          "correct": true,
+          "text": "Assistant: Let's break down the problem step by step:\n\n1. **Determine Kalinda's rate:**\n   - Kalinda adds 4 pieces per minute.\n\n2. **Determine her mom's rate:**\n   - Her mom adds half as many pieces per minute as Kalinda.\n   - So, her mom adds \\( \\frac{4}{2} = 2 \\) pieces per minute.\n\n3. **Calculate their combined rate:**\n   - Together, they add \\( 4 + 2 = 6 \\) pieces per minute.\n\n4. **Calculate the total time required to complete the puzzle:**\n   - The puzzle has 360 pieces.\n   - Time required = Total pieces / Combined rate\n   - Time required = \\( \\frac{360}{6} = 60 \\) minutes.\n\n5. **Convert the time from minutes to hours:**\n   - 60 minutes = 1 hour.\n\nSo, it will take them **1 hour** to complete the puzzle.\n\n#### 1",
+          "generated": 215,
+          "prefill": 90,
+          "wall_seconds": 6.428900767990854,
+          "returned_tokens": 215,
+          "terminal": true
+        }
+      ],
+      "matched_partial_budget_tokens": 197305,
+      "derived_matched_partial_seconds": 6034.549188094964,
+      "derived_matched_complete_seconds": 20571.485373876436,
+      "caveat": "256-token independent controls and 8192-token single-chain calibrations use batch1. Full independent controls allocate up to6 requests but execute microbatches of2 above horizon768; matched cost extrapolation is not a measured full matched run."
+    },
+    {
+      "method": "greedy",
+      "n": 2,
+      "calibration_budget_per_problem": 256.0,
+      "measured_prefill_tokens_per_problem": 125.5,
+      "measured_seconds_per_problem": 7.784414873487549,
+      "measured_tokens_per_second": 32.88622255628928,
+      "natural_single_output_pilots": [
+        {
+          "model": "1.7B",
+          "method": "greedy",
+          "task": "gsm8k",
+          "problem": 566,
+          "gold": "1E+1",
+          "answer": null,
+          "correct": false,
+          "text": "Assistant: Let's solve the problem step by step.\n\n1. **Shiloh's age in 7 years:**\n   Shiloh is currently 44 years old. In 7 years, his age will be:\n   \\[\n   44 + 7 = 51 \\text{ years old}\n   \\]\n\n2. **Nephew's age in 7 years:**\n   Let the nephew's current age be \\( x \\). In 7 years, the nephew's age will be:\n   \\[\n   x + 7\n   \\]\n\n3. **Setting up the equation:**\n   According to the problem, in 7 years, Shiloh will be three times as old as his nephew. Therefore:\n   \\[\n   51 = 3(x + 7)\n   \\]\n\n4. **Solving for \\( x \\):**\n   \\[\n   51 = 3(x + 7)\n   \\]\n   Divide both sides by 3:\n   \\[\n   17 = x + 7\n   \\]\n   Subtract 7 from both sides:\n   \\[\n   x = 10\n   \\]\n\n5. **Conclusion:**\n   The nephew is currently 10 years old.\n\n#### Answer: 10",
+          "generated": 271,
+          "prefill": 71,
+          "wall_seconds": 8.123418755014427,
+          "returned_tokens": 271,
+          "terminal": true
+        },
+        {
+          "model": "1.7B",
+          "method": "greedy",
+          "task": "gsm8k",
+          "problem": 228,
+          "gold": "1",
+          "answer": "1",
+          "correct": true,
+          "text": "Assistant: Let's break down the problem step by step.\n\n1. **Determine Kalinda's rate:**\n   - Kalinda adds 4 pieces per minute.\n\n2. **Determine her mom's rate:**\n   - Her mom adds half as many pieces per minute as Kalinda.\n   - So, her mom's rate is \\( \\frac{4}{2} = 2 \\) pieces per minute.\n\n3. **Calculate their combined rate:**\n   - Together, they add \\( 4 + 2 = 6 \\) pieces per minute.\n\n4. **Calculate the total time required to complete the puzzle:**\n   - The puzzle has 360 pieces.\n   - Time required = \\( \\frac{360 \\text{ pieces}}{6 \\text{ pieces per minute}} = 60 \\text{ minutes} \\).\n\n5. **Convert minutes to hours:**\n   - \\( 60 \\text{ minutes} = 1 \\text{ hour} \\).\n\n#### Answer:\n\\boxed{1}",
+          "generated": 217,
+          "prefill": 90,
+          "wall_seconds": 6.5475966539816,
+          "returned_tokens": 217,
+          "terminal": true
+        }
+      ],
+      "matched_partial_budget_tokens": 197305,
+      "derived_matched_partial_seconds": 5999.624908646331,
+      "derived_matched_complete_seconds": 20452.430199831608,
+      "caveat": "256-token independent controls and 8192-token single-chain calibrations use batch1. Full independent controls allocate up to6 requests but execute microbatches of2 above horizon768; matched cost extrapolation is not a measured full matched run."
+    },
+    {
+      "method": "single_chain",
+      "n": 2,
+      "calibration_budget_per_problem": 8192.0,
+      "measured_prefill_tokens_per_problem": 11065.5,
+      "measured_seconds_per_problem": 257.63638263047324,
+      "measured_tokens_per_second": 31.796751360811296,
+      "natural_single_output_pilots": [],
+      "matched_partial_budget_tokens": 197305,
+      "derived_matched_partial_seconds": 6205.19366148749,
+      "derived_matched_complete_seconds": 21153.204103662018,
+      "caveat": "256-token independent controls and 8192-token single-chain calibrations use batch1. Full independent controls allocate up to6 requests but execute microbatches of2 above horizon768; matched cost extrapolation is not a measured full matched run."
+    }
+  ],
+  "future_decode_tokens_per_second_for_10_second_problem": 67260.31713686344,
+  "future_decode_tokens_per_second_for_60_second_problem": 11210.052856143906,
+  "generated_tokens_per_second_for_all_five_groups_100_problems_in_6_hours": 15569.517855755425,
+  "generated_tokens_per_second_for_all_five_groups_200_problems_in_6_hours": 31139.03571151085,
+  "hf_total_projection": {
+    "gpu_hours_for_100": 2706.0031138182444,
+    "gpu_hours_for_200": 5412.006227636489,
+    "measured_control_groups": 4,
+    "tag": "derived, uses each small control throughput calibration and recorded PPT elapsed plus extrapolated remaining runtime; not an accuracy run"
+  },
+  "single_stream_ratio": 0.4320774282751469
+}

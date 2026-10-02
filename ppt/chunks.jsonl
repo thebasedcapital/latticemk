@@ -1,0 +1,9 @@
+{"chunk": 0, "wall_seconds": 445.26487122196704, "returncode": 0, "hard_timeout": false, "max_chunk_seconds": 590, "soft_checkpoint_seconds": 340, "charged_total_seconds": 445.2648677629768}
+{"chunk": 1, "wall_seconds": 413.88719792099437, "returncode": 1, "hard_timeout": false, "max_chunk_seconds": 590, "soft_checkpoint_seconds": 340, "charged_total_seconds": 859.1520640859962}
+{"chunk": 2, "wall_seconds": 450.7119967180188, "returncode": 0, "hard_timeout": false, "max_chunk_seconds": 590, "soft_checkpoint_seconds": 340, "charged_total_seconds": 1309.8640629559522}
+{"chunk": 3, "wall_seconds": 465.93670831399504, "returncode": 0, "hard_timeout": false, "max_chunk_seconds": 590, "soft_checkpoint_seconds": 340, "charged_total_seconds": 1775.800768666959}
+{"chunk": 4, "wall_seconds": 477.0573496890138, "returncode": 0, "hard_timeout": false, "max_chunk_seconds": 590, "soft_checkpoint_seconds": 340, "charged_total_seconds": 2252.8581174799474}
+{"chunk": 5, "wall_seconds": 404.2388079299708, "returncode": 0, "hard_timeout": false, "max_chunk_seconds": 590, "soft_checkpoint_seconds": 340, "charged_total_seconds": 2657.096924177953}
+{"chunk": 6, "wall_seconds": 397.3746216549771, "returncode": 0, "hard_timeout": false, "max_chunk_seconds": 590, "soft_checkpoint_seconds": 340, "charged_total_seconds": 3054.4715440489817}
+{"chunk": 7, "wall_seconds": 398.3353261729935, "returncode": 0, "hard_timeout": false, "max_chunk_seconds": 545.5284559510183, "soft_checkpoint_seconds": 295, "charged_total_seconds": 3452.806868090993}
+{"chunk": 8, "wall_seconds": 147.19409388996428, "returncode": 124, "hard_timeout": true, "max_chunk_seconds": 147.1931319090072, "soft_checkpoint_seconds": 1, "charged_total_seconds": 3600.000960139965}

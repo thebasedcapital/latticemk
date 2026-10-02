@@ -1,0 +1,16 @@
+[
+  {
+    "variant": "selected",
+    "prompt": 2,
+    "max_diff_sequential": 0.044586181640625,
+    "bitwise_sequential": false,
+    "max_diff_hf": 0.06586456298828125
+  },
+  {
+    "variant": "nocontract",
+    "prompt": 2,
+    "max_diff_sequential": 0.0,
+    "bitwise_sequential": true,
+    "max_diff_hf": 0.07506132125854492
+  }
+]

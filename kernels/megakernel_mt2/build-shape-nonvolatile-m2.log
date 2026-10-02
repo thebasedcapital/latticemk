@@ -1,0 +1,11 @@
+ptxas info    : 0 bytes gmem
+ptxas info    : Compiling entry function '_Z7profile2W2Py' for 'sm_75'
+ptxas info    : Function properties for _Z7profile2W2Py
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 70 registers, used 1 barriers, 12288 bytes smem, 408 bytes cmem[0]
+ptxas info    : Compile time = 72.163 ms
+ptxas info    : Compiling entry function '_Z5shape2W2' for 'sm_75'
+ptxas info    : Function properties for _Z5shape2W2
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 64 registers, used 1 barriers, 12288 bytes smem, 400 bytes cmem[0]
+ptxas info    : Compile time = 112.475 ms

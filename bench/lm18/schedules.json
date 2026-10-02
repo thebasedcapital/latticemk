@@ -1,0 +1,122 @@
+[
+  {
+    "path": "kernels/megakernel_mt2/schedules/causal_m1_ctx128.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/causal_m1_ctx128.json\n",
+    "stderr": ""
+  },
+  {
+    "path": "kernels/megakernel_mt2/schedules/causal_m1_ctx2048.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/causal_m1_ctx2048.json\n",
+    "stderr": ""
+  },
+  {
+    "path": "kernels/megakernel_mt2/schedules/causal_m2_ctx128.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/causal_m2_ctx128.json\n",
+    "stderr": ""
+  },
+  {
+    "path": "kernels/megakernel_mt2/schedules/causal_m2_ctx2048.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/causal_m2_ctx2048.json\n",
+    "stderr": ""
+  },
+  {
+    "path": "kernels/megakernel_mt2/schedules/causal_m3_ctx128.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/causal_m3_ctx128.json\n",
+    "stderr": ""
+  },
+  {
+    "path": "kernels/megakernel_mt2/schedules/causal_m3_ctx2048.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/causal_m3_ctx2048.json\n",
+    "stderr": ""
+  },
+  {
+    "path": "kernels/megakernel_mt2/schedules/causal_m4_ctx128.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/causal_m4_ctx128.json\n",
+    "stderr": ""
+  },
+  {
+    "path": "kernels/megakernel_mt2/schedules/causal_m4_ctx2048.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/causal_m4_ctx2048.json\n",
+    "stderr": ""
+  },
+  {
+    "path": "kernels/megakernel_mt2/schedules/causal_m5_ctx128.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/causal_m5_ctx128.json\n",
+    "stderr": ""
+  },
+  {
+    "path": "kernels/megakernel_mt2/schedules/causal_m5_ctx2048.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/causal_m5_ctx2048.json\n",
+    "stderr": ""
+  },
+  {
+    "path": "kernels/megakernel_mt2/schedules/batch_m1_ctx128.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/batch_m1_ctx128.json\n",
+    "stderr": ""
+  },
+  {
+    "path": "kernels/megakernel_mt2/schedules/batch_m1_ctx2048.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/batch_m1_ctx2048.json\n",
+    "stderr": ""
+  },
+  {
+    "path": "kernels/megakernel_mt2/schedules/batch_m2_ctx128.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/batch_m2_ctx128.json\n",
+    "stderr": ""
+  },
+  {
+    "path": "kernels/megakernel_mt2/schedules/batch_m2_ctx2048.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/batch_m2_ctx2048.json\n",
+    "stderr": ""
+  },
+  {
+    "path": "kernels/megakernel_mt2/schedules/batch_m3_ctx128.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/batch_m3_ctx128.json\n",
+    "stderr": ""
+  },
+  {
+    "path": "kernels/megakernel_mt2/schedules/batch_m3_ctx2048.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/batch_m3_ctx2048.json\n",
+    "stderr": ""
+  },
+  {
+    "path": "kernels/megakernel_mt2/schedules/batch_m4_ctx128.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/batch_m4_ctx128.json\n",
+    "stderr": ""
+  },
+  {
+    "path": "kernels/megakernel_mt2/schedules/batch_m4_ctx2048.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/batch_m4_ctx2048.json\n",
+    "stderr": ""
+  },
+  {
+    "path": "kernels/megakernel_mt2/schedules/batch_m5_ctx128.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/batch_m5_ctx128.json\n",
+    "stderr": ""
+  },
+  {
+    "path": "kernels/megakernel_mt2/schedules/batch_m5_ctx2048.json",
+    "returncode": 0,
+    "stdout": "ACCEPT /home/dell/Projects/latticemk/kernels/megakernel_mt2/schedules/batch_m5_ctx2048.json\n",
+    "stderr": ""
+  }
+]

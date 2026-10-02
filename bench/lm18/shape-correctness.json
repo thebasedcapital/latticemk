@@ -1,0 +1,38 @@
+[
+  {
+    "shape": "gu",
+    "m": 2,
+    "max_diff": 0.0,
+    "bitwise": true
+  },
+  {
+    "shape": "gu",
+    "m": 3,
+    "max_diff": 0.0,
+    "bitwise": true
+  },
+  {
+    "shape": "gu",
+    "m": 4,
+    "max_diff": 0.0,
+    "bitwise": true
+  },
+  {
+    "shape": "down",
+    "m": 2,
+    "max_diff": 0.0,
+    "bitwise": true
+  },
+  {
+    "shape": "down",
+    "m": 3,
+    "max_diff": 0.0,
+    "bitwise": true
+  },
+  {
+    "shape": "down",
+    "m": 4,
+    "max_diff": 0.0,
+    "bitwise": true
+  }
+]

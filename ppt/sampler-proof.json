@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "tests": 7,
+  "swaps": {
+    "negative_log_ratio": -1,
+    "observed_acceptance": 0.36843,
+    "target_acceptance": 0.36787944117144233,
+    "ordered_records": [
+      [
+        1
+      ],
+      [
+        2
+      ],
+      [
+        3
+      ],
+      [
+        0
+      ]
+    ],
+    "ordered_sweep_accepts": [
+      1,
+      1,
+      1
+    ]
+  },
+  "target": [
+    0.6666666666666666,
+    0.16666666666666666,
+    0.16666666666666666
+  ],
+  "observed": [
+    0.6657070707070707,
+    0.1675959595959596,
+    0.1666969696969697
+  ],
+  "eos_lengthenings": 8282,
+  "local_acceptance": 0.916
+}

@@ -1,0 +1,62 @@
+{
+  "equation_errors": [
+    {
+      "logp": 3.8900566456945285e-07,
+      "zeta": 1.6315425526158833e-06
+    },
+    {
+      "logp": 6.222910517994507e-07,
+      "zeta": 2.403464915978759e-06
+    },
+    {
+      "logp": 3.2265729676961286e-07,
+      "zeta": 1.3699195444694112e-06
+    },
+    {
+      "logp": 3.8900566456945285e-07,
+      "zeta": 1.6315425526158833e-06
+    },
+    {
+      "logp": 3.8900566456945285e-07,
+      "zeta": 1.6315425526158833e-06
+    },
+    {
+      "logp": 3.2265729676961286e-07,
+      "zeta": 1.3699195444694112e-06
+    }
+  ],
+  "teacher_forcing_drift": [
+    {
+      "logp": 0.02190375328063965,
+      "zeta": 0.03348982334136963
+    },
+    {
+      "logp": 0.009500592947006226,
+      "zeta": 0.03783702850341797
+    },
+    {
+      "logp": 0.01075601577758789,
+      "zeta": 0.03633260726928711
+    },
+    {
+      "logp": 0.012700140476226807,
+      "zeta": 0.0334780216217041
+    },
+    {
+      "logp": 0.02161884307861328,
+      "zeta": 0.07725882530212402
+    },
+    {
+      "logp": 0.01075601577758789,
+      "zeta": 0.03633260726928711
+    }
+  ],
+  "tokens": 85,
+  "prefill_tokens": 294,
+  "seconds": 1.6217051909770817,
+  "vocab_size": 151936,
+  "precision": "fp16 model; float32 cached scores independently evaluated in CPU float64",
+  "passed": true,
+  "equation_tolerance": 1e-05,
+  "diagnostic_note": "Teacher-forcing drift is expected for fp16 batch/shape changes and is not evidence that cached log probabilities omit vocabulary mass."
+}
