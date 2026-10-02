@@ -1,0 +1,16 @@
+spec/prompts.jsonl contains excerpts, tokenized excerpts and task wrappers around two public source corpora. Their licenses remain separate from the evaluation code.
+
+CPython 3.12.14 source
+Source: https://github.com/python/cpython/tree/v3.12.14/Lib
+Copyright Python Software Foundation and the original contributors.
+The complete original license is retained in CPYTHON-LICENSE.
+Changes: source files are tokenized, contiguous excerpts are selected and cropped to a prompt budget, then decoding-task instructions are added. Original Python files were not edited. Exact source URLs, hashes and excerpt token offsets are recorded per prompt.
+
+WikiText-2 raw test passages
+Dataset: https://huggingface.co/datasets/Salesforce/wikitext
+Dataset card: https://huggingface.co/datasets/Salesforce/wikitext/blob/main/README.md
+Original text: Wikipedia authors and contributors; WikiText corpus assembled by Stephen Merity and collaborators.
+The dataset card lists Creative Commons Attribution-ShareAlike 3.0 and GNU Free Documentation License. Passage excerpts are provided under Creative Commons Attribution-ShareAlike 3.0:
+https://creativecommons.org/licenses/by-sa/3.0/
+https://creativecommons.org/licenses/by-sa/3.0/legalcode
+Changes: test rows are concatenated, tokenized, sampled at recorded offsets, cropped to a prompt budget and wrapped with RAG/summarization/continuation instructions. The excerpt text is not presented as the evaluation-code author's writing. Passage source hashes and token offsets are recorded per prompt.

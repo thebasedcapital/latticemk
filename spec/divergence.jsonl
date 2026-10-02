@@ -1,0 +1,80 @@
+{"tag": "measured", "id": "code-00", "category": "code", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "code-01", "category": "code", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "code-02", "category": "code", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "code-03", "category": "code", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "code-04", "category": "code", "spec_identity_mt1": true, "diverged": true, "first_position": 1, "v2_top_two": {"tokens": [78873, 2647], "logits": [21.77301025390625, 21.758270263671875], "margin": 0.014739990234375}, "mt3_top_two": {"tokens": [2647, 78873], "logits": [21.773300170898438, 21.770523071289062], "margin": 0.002777099609375}}
+{"tag": "measured", "id": "code-05", "category": "code", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "code-06", "category": "code", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "code-07", "category": "code", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "code-08", "category": "code", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "code-09", "category": "code", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "code-10", "category": "code", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "code-11", "category": "code", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "code-12", "category": "code", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "code-13", "category": "code", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "code-14", "category": "code", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "code-15", "category": "code", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "code-16", "category": "code", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "code-17", "category": "code", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "code-18", "category": "code", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "code-19", "category": "code", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "rag-00", "category": "rag", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "rag-01", "category": "rag", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "rag-02", "category": "rag", "spec_identity_mt1": true, "diverged": true, "first_position": 33, "v2_top_two": {"tokens": [271, 323], "logits": [19.144208908081055, 19.1365966796875], "margin": 0.0076122283935546875}, "mt3_top_two": {"tokens": [323, 271], "logits": [19.114730834960938, 19.110382080078125], "margin": 0.0043487548828125}}
+{"tag": "measured", "id": "rag-03", "category": "rag", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "rag-04", "category": "rag", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "rag-05", "category": "rag", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "rag-06", "category": "rag", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "rag-07", "category": "rag", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "rag-08", "category": "rag", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "rag-09", "category": "rag", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "rag-10", "category": "rag", "spec_identity_mt1": true, "diverged": true, "first_position": 57, "v2_top_two": {"tokens": [10357, 323], "logits": [17.78118133544922, 17.77788543701172], "margin": 0.0032958984375}, "mt3_top_two": {"tokens": [323, 10357], "logits": [17.78057861328125, 17.744140625], "margin": 0.03643798828125}}
+{"tag": "measured", "id": "rag-11", "category": "rag", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "rag-12", "category": "rag", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "rag-13", "category": "rag", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "rag-14", "category": "rag", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "rag-15", "category": "rag", "spec_identity_mt1": true, "diverged": true, "first_position": 199, "v2_top_two": {"tokens": [374, 702], "logits": [23.540313720703125, 23.531780242919922], "margin": 0.008533477783203125}, "mt3_top_two": {"tokens": [702, 374], "logits": [23.52447509765625, 23.52142333984375], "margin": 0.0030517578125}}
+{"tag": "measured", "id": "rag-16", "category": "rag", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "rag-17", "category": "rag", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "rag-18", "category": "rag", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "rag-19", "category": "rag", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "summarization-00", "category": "summarization", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "summarization-01", "category": "summarization", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "summarization-02", "category": "summarization", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "summarization-03", "category": "summarization", "spec_identity_mt1": true, "diverged": true, "first_position": 97, "v2_top_two": {"tokens": [10158, 4124], "logits": [26.263675689697266, 26.232967376708984], "margin": 0.03070831298828125}, "mt3_top_two": {"tokens": [4124, 10158], "logits": [26.223175048828125, 26.222091674804688], "margin": 0.0010833740234375}}
+{"tag": "measured", "id": "summarization-04", "category": "summarization", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "summarization-05", "category": "summarization", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "summarization-06", "category": "summarization", "spec_identity_mt1": true, "diverged": true, "first_position": 2, "v2_top_two": {"tokens": [21314, 34334], "logits": [22.688488006591797, 22.680023193359375], "margin": 0.008464813232421875}, "mt3_top_two": {"tokens": [34334, 21314], "logits": [22.666366577148438, 22.660507202148438], "margin": 0.005859375}}
+{"tag": "measured", "id": "summarization-07", "category": "summarization", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "summarization-08", "category": "summarization", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "summarization-09", "category": "summarization", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "summarization-10", "category": "summarization", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "summarization-11", "category": "summarization", "spec_identity_mt1": true, "diverged": true, "first_position": 45, "v2_top_two": {"tokens": [1283, 311], "logits": [25.246519088745117, 25.22967529296875], "margin": 0.016843795776367188}, "mt3_top_two": {"tokens": [311, 1283], "logits": [25.255569458007812, 25.22369384765625], "margin": 0.0318756103515625}}
+{"tag": "measured", "id": "summarization-12", "category": "summarization", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "summarization-13", "category": "summarization", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "summarization-14", "category": "summarization", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "summarization-15", "category": "summarization", "spec_identity_mt1": true, "diverged": true, "first_position": 137, "v2_top_two": {"tokens": [10901, 9044], "logits": [25.310176849365234, 25.306194305419922], "margin": 0.0039825439453125}, "mt3_top_two": {"tokens": [9044, 10901], "logits": [25.304611206054688, 25.28857421875], "margin": 0.0160369873046875}}
+{"tag": "measured", "id": "summarization-16", "category": "summarization", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "summarization-17", "category": "summarization", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "summarization-18", "category": "summarization", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "summarization-19", "category": "summarization", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "chat-00", "category": "chat", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "chat-01", "category": "chat", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "chat-02", "category": "chat", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "chat-03", "category": "chat", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "chat-04", "category": "chat", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "chat-05", "category": "chat", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "chat-06", "category": "chat", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "chat-07", "category": "chat", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "chat-08", "category": "chat", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "chat-09", "category": "chat", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "chat-10", "category": "chat", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "chat-11", "category": "chat", "spec_identity_mt1": true, "diverged": true, "first_position": 242, "v2_top_two": {"tokens": [40, 785], "logits": [20.16071319580078, 20.150114059448242], "margin": 0.010599136352539062}, "mt3_top_two": {"tokens": [785, 40], "logits": [20.200843811035156, 20.200485229492188], "margin": 0.00035858154296875}}
+{"tag": "measured", "id": "chat-12", "category": "chat", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "chat-13", "category": "chat", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "chat-14", "category": "chat", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "chat-15", "category": "chat", "spec_identity_mt1": true, "diverged": true, "first_position": 181, "v2_top_two": {"tokens": [422, 14762], "logits": [24.9844970703125, 24.961902618408203], "margin": 0.022594451904296875}, "mt3_top_two": {"tokens": [14762, 422], "logits": [24.97894287109375, 24.9696044921875], "margin": 0.00933837890625}}
+{"tag": "measured", "id": "chat-16", "category": "chat", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "chat-17", "category": "chat", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "chat-18", "category": "chat", "spec_identity_mt1": true, "diverged": false, "first_position": null, "v2_top_two": null, "mt3_top_two": null}
+{"tag": "measured", "id": "chat-19", "category": "chat", "spec_identity_mt1": true, "diverged": true, "first_position": 77, "v2_top_two": {"tokens": [1083, 1033], "logits": [26.11461639404297, 26.109115600585938], "margin": 0.00550079345703125}, "mt3_top_two": {"tokens": [1033, 1083], "logits": [26.11541748046875, 26.115081787109375], "margin": 0.000335693359375}}
