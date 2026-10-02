@@ -1,0 +1,323 @@
+--- kernels/megakernel_mt2/mega_mt.cu	2026-10-02 06:07:03.305062520 -0400
++++ kernels/megakernel_pro/mega_mt.cu	2026-10-02 07:12:50.131361083 -0400
+@@ -89,7 +89,6 @@
+ } u;
+ __shared__ __align__(16) __half qhead[128];
+ __shared__ __align__(16) __half kvloc[256];  // k_pos | v_pos of the pos row
+-__shared__ float red[WARPS];
+ #include "profile_detail.cuh"
+ 
+ __device__ __forceinline__ float warp_sum(float v) {
+@@ -98,19 +97,6 @@
+   return v;
+ }
+ 
+-__device__ float block_sum(float v) {
+-  const int lane = threadIdx.x & 31, warp = threadIdx.x >> 5;
+-  v = warp_sum(v);
+-  if (lane == 0) red[warp] = v;
+-  __syncthreads();
+-  v = threadIdx.x < WARPS ? red[threadIdx.x] : 0.f;
+-  if (warp == 0) v = warp_sum(v);
+-  if (threadIdx.x == 0) red[0] = v;
+-  __syncthreads();
+-  v = red[0];
+-  __syncthreads();
+-  return v;
+-}
+ 
+ // grid barrier: `expect` is a per-CTA running target (+= NCTA per call).
+ __device__ __forceinline__ void gbar(int* ctr, int& expect) {
+@@ -179,13 +165,15 @@
+     stage_store(col,idx,cpr,_pk);                        \
+   } while (0)
+ 
+-// residual-stream update + rms^-1 (xloc[col] += src, or xloc = emb[tok]).
+-__device__ float xresidual(const View& p, const __half* src, bool embed, int col) {
+-  float ss = 0.f;
+-  const int tid = threadIdx.x;
+-  if (embed) {
+-    const __half* erow = p.emb + (int64_t)p.tok[0] * HID;
+-    for (int i = tid * 8; i < HID; i += THREADS * 8) {
++// Preserve the four active warp sums and their padded XOR reduction order.
++__shared__ float norm_part[MT][4], norm_r[MT];
++__device__ void xresidual(const P2& p, bool embed, bool from_o) {
++  const int lane = threadIdx.x & 31, warp = threadIdx.x >> 5;
++  for (int item = threadIdx.x; item < MT * (HID / 8); item += THREADS) {
++    const int col = item / (HID / 8), chunk = item % (HID / 8), i = chunk * 8;
++    float ss = 0.f;
++    if (embed) {
++      const __half* erow = p.emb + (int64_t)p.tok[col] * HID;
+       uint4 v = *reinterpret_cast<const uint4*>(erow + i);
+       *reinterpret_cast<uint4*>(xloc[col] + i) = v;
+       __half2 a = as_h2(v.x), b = as_h2(v.y), c = as_h2(v.z), d = as_h2(v.w);
+@@ -193,9 +181,8 @@
+       float2 fc = __half22float2(c), fd = __half22float2(d);
+       ss += fa.x * fa.x + fa.y * fa.y + fb.x * fb.x + fb.y * fb.y +
+             fc.x * fc.x + fc.y * fc.y + fd.x * fd.x + fd.y * fd.y;
+-    }
+-  } else {
+-    for (int i = tid * 8; i < HID; i += THREADS * 8) {
++    } else {
++      const __half* src = (from_o ? p.oo : p.dout) + col * HID;
+       uint4 xv = *reinterpret_cast<const uint4*>(xloc[col] + i);
+       uint4 sv = *reinterpret_cast<const uint4*>(src + i);
+       float t[8];
+@@ -217,15 +204,24 @@
+             __floats2half2_rn(t[2 * j], t[2 * j + 1]);
+       *reinterpret_cast<uint4*>(xloc[col] + i) = *reinterpret_cast<uint4*>(o);
+     }
++    ss = warp_sum(ss);
++    if (lane == 0) norm_part[col][chunk / 32] = ss;
+   }
+-  ss = block_sum(ss);
+-  return rsqrtf(ss / HID + RMS_EPS);
++  __syncthreads();
++  if (warp < MT) {
++    float ss = lane < 4 ? norm_part[warp][lane] : 0.f;
++    ss = warp_sum(ss);
++    if (lane == 0) norm_r[warp] = rsqrtf(ss / HID + RMS_EPS);
++  }
++  __syncthreads();
+ }
+ 
+-// sx = xloc * r * wrow, transposed; cpr = HID/32 = 32 -> 128 units.
+-__device__ void stage_norm(const __half* wrow, float r, int col) {
++// Stage all normalized columns with one publication barrier.
++__device__ void stage_norm(const __half* wrow) {
+   const int cpr = HID >> 5;
+-  for (int idx = threadIdx.x; idx < cpr * 4; idx += THREADS) {
++  for (int item = threadIdx.x; item < MT * cpr * 4; item += THREADS) {
++    const int col = item / (cpr * 4), idx = item % (cpr * 4);
++    const float r = norm_r[col];
+     const int uu = idx / cpr, c = idx % cpr;
+     const int i = (c * 4 + uu) * 8;
+     uint4 xv = *reinterpret_cast<const uint4*>(xloc[col] + i);
+@@ -245,47 +241,56 @@
+   __syncthreads();
+ }
+ 
+-// qkv/gu/lm prologue: fold residual (+embed) + RMSNorm into sx.
+-__device__ void pro_norm(const View& p, const __half* src, bool embed, int wsel, int col) {
+-  const float r = xresidual(p, src, embed, col);
+-  stage_norm(p.norms + (int64_t)wsel * HID, r, col);
++__device__ void pro_norm(const P2& p, bool embed, bool from_o, int wsel) {
++  xresidual(p, embed, from_o);
++  stage_norm(p.norms + (int64_t)wsel * HID);
+ }
+ 
+ // o-proj prologue: combine the 32 attention partials into sx (in = 2048).
+ // Head h has partials 2h (first half of positions) and 2h+1 (second half).
+-__device__ void pro_attnc(const View& p, int col) {
+-  const int cpr = QROWS >> 5;  // 64
+-  for (int idx = threadIdx.x; idx < cpr * 4; idx += THREADS) {
+-    const int uu = idx / cpr, c = idx % cpr;
+-    const int i = (c * 4 + uu) * 8;
+-    const int h = i >> 7;  // 8-elem groups never straddle a head boundary
+-    const float* pa = p.part + (h * 2 + 0) * 130;
+-    const float* pb = p.part + (h * 2 + 1) * 130;
+-    const float m0 = pa[129], m1 = pb[129];
+-    const float M = fmaxf(m0, m1);
+-    const float e0 = m0 == NEG_INF ? 0.f : __expf(m0 - M);
+-    const float e1 = m1 == NEG_INF ? 0.f : __expf(m1 - M);
+-    const float l = e0 * pa[128] + e1 * pb[128];
+-    const float inv = l > 0.f ? 1.f / l : 0.f;
+-    __half o[8];
+-#pragma unroll
+-    for (int j = 0; j < 8; ++j) {
+-      const int e = (i & 127) + j;
+-      o[j] = __float2half((e0 * pa[e] + e1 * pb[e]) * inv);
++__device__ void pro_attnc(const P2& p) {
++  const int cpr = QROWS >> 5;
++  // A warp owns a head; aligned float2 loads keep the partial reads coalesced.
++  for (int item = threadIdx.x; item < MT * (QROWS / 4); item += THREADS) {
++    const int col = item / (QROWS / 4), chunk = item % (QROWS / 4);
++    const int i = chunk * 4, h = i >> 7;
++    const float* pa = p.part + col * NATTN * 130 + (h * 2 + 0) * 130;
++    const float* pb = p.part + col * NATTN * 130 + (h * 2 + 1) * 130;
++    float e0 = 0.f, e1 = 0.f, inv = 0.f;
++    if ((threadIdx.x & 31) == 0) {
++      const float m0 = pa[129], m1 = pb[129], M = fmaxf(m0, m1);
++      e0 = m0 == NEG_INF ? 0.f : __expf(m0 - M);
++      e1 = m1 == NEG_INF ? 0.f : __expf(m1 - M);
++      const float l = e0 * pa[128] + e1 * pb[128];
++      inv = l > 0.f ? 1.f / l : 0.f;
++    }
++    e0 = __shfl_sync(0xffffffffu, e0, 0);
++    e1 = __shfl_sync(0xffffffffu, e1, 0);
++    inv = __shfl_sync(0xffffffffu, inv, 0);
++    uint32_t* words = reinterpret_cast<uint32_t*>(u.sx4[col]);
++#pragma unroll
++    for (int j = 0; j < 2; ++j) {
++      const int e = (i & 127) + j * 2;
++      const float2 a = *reinterpret_cast<const float2*>(pa + e);
++      const float2 b = *reinterpret_cast<const float2*>(pb + e);
++      const __half2 v = __floats2half2_rn((e0 * a.x + e1 * b.x) * inv,
++                                        (e0 * a.y + e1 * b.y) * inv);
++      words[((i & 31) / 2 + j) * cpr + i / 32] =
++          *reinterpret_cast<const uint32_t*>(&v);
+     }
+-    SX4_WRITE(idx, o);
+   }
+   __syncthreads();
+ }
+ 
+ // down-proj prologue: sx = silu(gate) * up from gu[6144]. in = 3072.
+-__device__ void pro_silu(const View& p, int col) {
+-  const int cpr = INTER >> 5;  // 96
+-  for (int idx = threadIdx.x; idx < cpr * 4; idx += THREADS) {
+-    const int uu = idx / cpr, c = idx % cpr;
+-    const int i = (c * 4 + uu) * 8;
+-    uint4 gv = *reinterpret_cast<const uint4*>(p.gu + i);
+-    uint4 uv = *reinterpret_cast<const uint4*>(p.gu + INTER + i);
++__device__ void pro_silu(const P2& p) {
++  const int cpr = INTER >> 5;
++  for (int item = threadIdx.x; item < MT * cpr * 4; item += THREADS) {
++    const int col = item / (cpr * 4), chunk = item % (cpr * 4);
++    const int i = chunk * 8;
++    const int idx = (chunk % 4) * cpr + chunk / 4;
++    uint4 gv = *reinterpret_cast<const uint4*>(p.gu + col * GU + i);
++    uint4 uv = *reinterpret_cast<const uint4*>(p.gu + col * GU + INTER + i);
+     __half o[8];
+     const uint32_t gs[4] = {gv.x, gv.y, gv.z, gv.w};
+     const uint32_t us[4] = {uv.x, uv.y, uv.z, uv.w};
+@@ -456,49 +461,55 @@
+ }
+ 
+ // ============================ argmax =========================================
+-__device__ void argp2(const View& p, int cta) {
++__device__ void argp2(const P2& p, int cta) {
++  constexpr int WP = WARPS / MT;
++  __shared__ float sv[MT][WP];
++  __shared__ int si[MT][WP];
+   const int lane = threadIdx.x & 31, warp = threadIdx.x >> 5;
++  const int col = warp / WP, rowwarp = warp % WP;
+   const int per = (VOCAB + NARGP - 1) / NARGP;
+   const int a0 = cta * per, a1 = min(VOCAB, a0 + per);
+   float bv = NEG_INF;
+   int bi = a0;
+-  for (int i = a0 + threadIdx.x; i < a1; i += THREADS) {
+-    const float v = p.logits[i];
+-    if (v > bv) { bv = v; bi = i; }
+-  }
++  if (col < MT) {
++    for (int i = a0 + rowwarp * 32 + lane; i < a1; i += WP * 32) {
++      const float v = p.logits[col * VOCAB + i];
++      if (v > bv) { bv = v; bi = i; }
++    }
+ #pragma unroll
+   for (int o = 16; o > 0; o >>= 1) {
+     const float ov = __shfl_xor_sync(0xffffffffu, bv, o);
+     const int oi = __shfl_xor_sync(0xffffffffu, bi, o);
+     if (ov > bv || (ov == bv && oi < bi)) { bv = ov; bi = oi; }
+   }
+-  __shared__ float sv[WARPS];
+-  __shared__ int si[WARPS];
+-  if (lane == 0) { sv[warp] = bv; si[warp] = bi; }
++  if (lane == 0) { sv[col][rowwarp] = bv; si[col][rowwarp] = bi; }
++  }
+   __syncthreads();
+-  if (warp == 0) {
+-    bv = lane < WARPS ? sv[lane] : NEG_INF;
+-    bi = lane < WARPS ? si[lane] : 0;
++  if (warp < MT) {
++    bv = lane < WP ? sv[warp][lane] : NEG_INF;
++    bi = lane < WP ? si[warp][lane] : 0;
+ #pragma unroll
+     for (int o = 16; o > 0; o >>= 1) {
+       const float ov = __shfl_xor_sync(0xffffffffu, bv, o);
+       const int oi = __shfl_xor_sync(0xffffffffu, bi, o);
+       if (ov > bv || (ov == bv && oi < bi)) { bv = ov; bi = oi; }
+     }
+-    if (lane == 0) { p.argp[2 * cta] = bv; p.argp[2 * cta + 1] = (float)bi; }
++    if (lane == 0) {
++      p.argp[warp * NARGP * 2 + 2 * cta] = bv;
++      p.argp[warp * NARGP * 2 + 2 * cta + 1] = (float)bi;
++    }
+   }
+ }
+ 
+-__device__ void argc2(const View& p, int pos) {
+-  // CTA 0 only: merge NARGP=36 partials (threads <36 each hold one slice).
+-  __shared__ float sv[WARPS];
+-  __shared__ int si[WARPS];
+-  const int lane = threadIdx.x & 31, warp = threadIdx.x >> 5;
++__device__ void argc2(const P2& p) {
++  const int lane = threadIdx.x & 31, col = threadIdx.x >> 5;
++  if (col >= MT) return;
+   float bv = NEG_INF;
+   int bi = 0;
+-  if (threadIdx.x < NARGP) {
+-    bv = p.argp[2 * threadIdx.x];
+-    bi = (int)p.argp[2 * threadIdx.x + 1];
++  for (int i = lane; i < NARGP; i += 32) {
++    const float v = p.argp[col * NARGP * 2 + 2 * i];
++    const int ix = (int)p.argp[col * NARGP * 2 + 2 * i + 1];
++    if (v > bv || (v == bv && ix < bi)) { bv = v; bi = ix; }
+   }
+ #pragma unroll
+   for (int o = 16; o > 0; o >>= 1) {
+@@ -506,18 +517,9 @@
+     const int oi = __shfl_xor_sync(0xffffffffu, bi, o);
+     if (ov > bv || (ov == bv && oi < bi)) { bv = ov; bi = oi; }
+   }
+-  if (lane == 0) { sv[warp] = bv; si[warp] = bi; }
+-  __syncthreads();
+-  if (warp == 0) {
+-    bv = lane < WARPS ? sv[lane] : NEG_INF;
+-    bi = lane < WARPS ? si[lane] : 0;
+-#pragma unroll
+-    for (int o = 16; o > 0; o >>= 1) {
+-      const float ov = __shfl_xor_sync(0xffffffffu, bv, o);
+-      const int oi = __shfl_xor_sync(0xffffffffu, bi, o);
+-      if (ov > bv || (ov == bv && oi < bi)) { bv = ov; bi = oi; }
+-    }
+-    if (lane == 0) { p.tok[0] = bi; p.tok_hist[pos] = bi; }
++  if (lane == 0) {
++    p.tok[col] = bi;
++    p.tok_hist[col * p.cap + position(p, col)] = bi;
+   }
+ }
+ 
+@@ -550,7 +552,7 @@
+   }
+ #endif
+   for(int l=0;l<NLAY;++l) {
+-    for(int m=0;m<MT;++m) {const View v=column(p,m);pro_norm(v,v.dout,l==0,l,m);}
++    pro_norm(p,l==0,false,l);
+     TRACE(6);
+     gemv_run(p.w[l*4],cta);gbar(p.bar,expect);
+     TRACE(0);
+@@ -565,26 +567,26 @@
+     }
+     gbar(p.bar,expect);
+     TRACE(5);
+-    for(int m=0;m<MT;++m) pro_attnc(column(p,m),m);
++    pro_attnc(p);
+     TRACE(6);
+     gemv_run(p.w[l*4+1],cta);gbar(p.bar,expect);
+     TRACE(1);
+-    for(int m=0;m<MT;++m) {const View v=column(p,m);pro_norm(v,v.oo,false,NLAY+l,m);}
++    pro_norm(p,false,true,NLAY+l);
+     TRACE(6);
+     gemv_run(p.w[l*4+2],cta);gbar(p.bar,expect);
+     TRACE(2);
+-    for(int m=0;m<MT;++m) pro_silu(column(p,m),m);
++    pro_silu(p);
+     TRACE(6);
+     gemv_run(p.w[l*4+3],cta);gbar(p.bar,expect);
+     TRACE(3);
+   }
+-  for(int m=0;m<MT;++m) {const View v=column(p,m);pro_norm(v,v.dout,false,4*NLAY,m);}
++  pro_norm(p,false,false,4*NLAY);
+   TRACE(6);
+   gemv_run(p.w[W_LM],cta);gbar(p.bar,expect);
+   TRACE(4);
+-  for(int m=0;m<MT;++m) {argp2(column(p,m),cta);__syncthreads();}
++  argp2(p,cta);
+   gbar(p.bar,expect);
+-  for(int m=0;m<MT;++m) {if(cta==0) argc2(column(p,m),position(p,m));__syncthreads();}
++  if(cta==0) argc2(p);
+   gbar(p.bar,expect);
+   TRACE(6);
+ #ifdef PROFILE

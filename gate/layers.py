@@ -231,16 +231,19 @@ def collect(engine, library, data, refs, m=1, mode='causal', local=False):
     return results, manifest
 
 
-def _original(engine, m):
+def _original(engine, m, library=None):
     if engine == 'mt':
+        if library is not None:
+            import contract
+            return contract.calibration_library(library, m)
         return ROOT / f'kernels/megakernel_mt/libmt{m}.so'
     return debug.ORIGINAL[engine][0]
 
 
-def calibration(engine, data, cache, m=1, mode='causal', local=False):
+def calibration(engine, data, cache, m=1, mode='causal', local=False, library=None):
     torch.set_num_threads(8)
     refs, key = reference(engine, cache)
-    original = _original(engine, m)
+    original = _original(engine, m, library)
     _, signature = debug.build(engine, original, m=m)
     stamp = hashlib.sha256(json.dumps(signature, sort_keys=True).encode()).hexdigest()[:16]
     probe = 'local' if local else 'full'
@@ -270,7 +273,7 @@ def _probe_check(engine, library, data, cache, m=1, mode='causal', local=False):
     started = time.perf_counter()
     # Resolve first: unsupported candidates must not accidentally run originals.
     debug.resolve_source(engine, library)
-    cal, refs = calibration(engine, data, cache, m, mode, local)
+    cal, refs = calibration(engine, data, cache, m, mode, local, library)
     results, signature = collect(engine, library, data, refs, m, mode, local)
     failures = []
     maxima = torch.zeros_like(cal['bounds'])

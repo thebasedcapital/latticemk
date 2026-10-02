@@ -51,10 +51,8 @@ def resolve_source(engine, library, source=None):
         return path, tuple(value['defines'])
     if engine in ORIGINAL and library == ORIGINAL[engine][0].resolve():
         return ORIGINAL[engine][1], ()
-    if engine == 'mt':
-        original = ROOT / 'kernels/megakernel_mt'
-        if library.parent == original and re.fullmatch(r'libmt[1-5]\.so', library.name):
-            return original / 'mega_mt.cu', ()
+    if engine == 'mt' and re.fullmatch(r'libmt[1-5]\.so', library.name) and (library.parent / 'mega_mt.cu').is_file():
+        return library.parent / 'mega_mt.cu', ()  # megakernel_mt and its forks (mt2, attn, pro, mma)
     adjacent = library.with_suffix('.cu')
     if adjacent.is_file():
         return adjacent, ()
@@ -67,9 +65,78 @@ def _once(text, old, new):
     return text.replace(old, new, 1)
 
 
+def _instrument_mt_columns(text):
+    """Dump all-column staging without rebuilding the old scalar prologue."""
+    helper = '''
+__device__ const __half* gate_in = nullptr;
+__device__ float* gate_hidden = nullptr;
+__device__ float* gate_attention = nullptr;
+__shared__ int gate_layer;
+__device__ void gate_norm_columns(int layer) {
+  const int lane = threadIdx.x & 31, warp = threadIdx.x >> 5;
+  for (int item = threadIdx.x; item < MT * (HID / 8); item += THREADS) {
+    const int col = item / (HID / 8), chunk = item % (HID / 8), i = chunk * 8;
+    const __half* src = gate_in + ((int64_t)col * NLAY + layer) * HID;
+    const uint4 v = *reinterpret_cast<const uint4*>(src + i);
+    *reinterpret_cast<uint4*>(xloc[col] + i) = v;
+    const float2 a = __half22float2(as_h2(v.x)), b = __half22float2(as_h2(v.y));
+    const float2 c = __half22float2(as_h2(v.z)), d = __half22float2(as_h2(v.w));
+    float ss = a.x*a.x + a.y*a.y + b.x*b.x + b.y*b.y +
+               c.x*c.x + c.y*c.y + d.x*d.x + d.y*d.y;
+    ss = warp_sum(ss);
+    if (lane == 0) norm_part[col][chunk / 32] = ss;
+  }
+  __syncthreads();
+  if (warp < MT) {
+    float ss = lane < 4 ? norm_part[warp][lane] : 0.f;
+    ss = warp_sum(ss);
+    if (lane == 0) norm_r[warp] = rsqrtf(ss / HID + RMS_EPS);
+  }
+  __syncthreads();
+}
+__device__ void gate_dump_hidden(const __half* down, int layer, int col) {
+  if (gate_hidden && blockIdx.x == 0)
+    for (int i = threadIdx.x; i < HID; i += THREADS)
+      gate_hidden[((int64_t)col * NLAY + layer) * HID + i] =
+        __half2float(__float2half_rn(__half2float(xloc[col][i]) + __half2float(down[i])));
+}
+extern "C" int gate_debug_set(int64_t input, int64_t hidden, int64_t attention) {
+  const __half* a = reinterpret_cast<const __half*>(input);
+  float* b = reinterpret_cast<float*>(hidden);
+  float* c = reinterpret_cast<float*>(attention);
+  cudaError_t e = cudaMemcpyToSymbol(gate_in, &a, sizeof(a));
+  if (e == cudaSuccess) e = cudaMemcpyToSymbol(gate_hidden, &b, sizeof(b));
+  if (e == cudaSuccess) e = cudaMemcpyToSymbol(gate_attention, &c, sizeof(c));
+  return (int)e;
+}
+'''
+    marker = re.search(r'__device__ (?:NORMQUAL )?void pro_norm\(const P2& p, bool embed, bool from_o, int wsel\) \{', text).group(0)
+    text = _once(text, marker, helper + '\n' + marker)
+    text = _once(text, '  xresidual(p, embed, from_o);', '''  if (wsel < NLAY && threadIdx.x == 0) gate_layer = wsel;
+  __syncthreads();
+  if (gate_in && wsel < NLAY) gate_norm_columns(wsel);
+  else xresidual(p, embed, from_o);''')
+    # Capture the half2 value actually published to GEMM, after FP16 rounding.
+    store = '''      words[((i & 31) / 2 + j) * cpr + i / 32] =
+          *reinterpret_cast<const uint32_t*>(&v);'''
+    text = _once(text, store, store + '''
+      if (gate_attention && blockIdx.x == 0) {
+        const int offset = ((int64_t)col * NLAY + gate_layer) * QROWS + i + j * 2;
+        gate_attention[offset] = __low2float(v);
+        gate_attention[offset + 1] = __high2float(v);
+      }''')
+    text = _once(text, 'gemv_run(p.w[l*4+3],cta);gbar(p.bar,expect);',
+                 'gemv_run(p.w[l*4+3],cta);gbar(p.bar,expect);\n'
+                 '    for(int m=0;m<MT;++m) gate_dump_hidden(column(p,m).dout,l,m);\n'
+                 '    __syncthreads();')
+    return text
+
+
 def instrument(text, engine):
     """Inject local HF incoming states and dump the candidate's actual staged attention."""
     mt = engine == 'mt'
+    if mt and re.search(r'__device__ (?:NORMQUAL )?void pro_norm\(const P2& p, bool embed, bool from_o, int wsel\)', text):
+        return _instrument_mt_columns(text)
     col = 'col' if mt else '0'
     x = 'xloc[col]' if mt else 'xloc'
     helper = f'''
@@ -149,12 +216,16 @@ def build(engine, library, m=1, source=None, defines=None):
     flags = list(associated) + list(defines or ())
     if engine == 'scale' and not explicit_flags and 'FP32_DOT' not in flags:
         flags.append('FP32_DOT')
+    nvcc_extra = []
     if engine == 'mt':
-        flags.extend([f'MT={m}', f'THREADS={512 if m == 5 else 1024}'])
+        import contract
+        built = contract.load(library)
+        flags.extend([f'MT={m}', f'THREADS={contract.threads(built, m)}'])
+        nvcc_extra = built['nvcc_flags']
     manifest = {'version': VERSION, 'engine': engine, 'm': m, 'source': str(source),
                 'implementation_sha256': digest(Path(__file__)),
                 'source_sha256': digest(source), 'library': str(Path(library).resolve()),
-                'library_sha256': digest(library), 'defines': flags,
+                'library_sha256': digest(library), 'defines': flags, 'nvcc_flags': nvcc_extra,
                 'headers': {p.name: digest(p) for p in source.parent.glob('*.cuh')}}
     key = hashlib.sha256(json.dumps(manifest, sort_keys=True).encode()).hexdigest()[:20]
     folder = HERE / 'build' / f'debug-{engine}-{key}'
@@ -169,7 +240,7 @@ def build(engine, library, m=1, source=None, defines=None):
     cuda = Path.home() / '.local/cuda-13.3'
     command = [str(cuda / 'bin/nvcc'), '-O3', '-arch=sm_75', '-std=c++17',
                '-allow-unsupported-compiler', '-L' + str(cuda / 'lib'), '-I' + str(folder),
-               '-Xcompiler', '-fPIC', '-shared', '-cudart', 'static', *['-D' + f for f in flags],
+               '-Xcompiler', '-fPIC', '-shared', '-cudart', 'static', *nvcc_extra, *['-D' + f for f in flags],
                '-o', str(output), str(copy)]
     proc = subprocess.run(command, capture_output=True, text=True, timeout=120)
     (folder / 'build.log').write_text(proc.stdout + proc.stderr)

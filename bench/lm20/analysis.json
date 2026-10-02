@@ -1,0 +1,247 @@
+{
+  "full_pass": [
+    {
+      "mode": "causal",
+      "m": 1,
+      "mt2_ms": 1.6183039546012878,
+      "attention_ms": 1.584447979927063,
+      "delta_ms": -0.033855974674224854,
+      "relative": 0.9790793474996072,
+      "attention_M_over_M1": 1.0
+    },
+    {
+      "mode": "causal",
+      "m": 2,
+      "mt2_ms": 2.2967519760131836,
+      "attention_ms": 2.226288080215454,
+      "delta_ms": -0.07046389579772949,
+      "relative": 0.9693201980302444,
+      "attention_M_over_M1": 1.4050875184415565
+    },
+    {
+      "mode": "causal",
+      "m": 4,
+      "mt2_ms": 3.468287944793701,
+      "attention_ms": 3.261520028114319,
+      "delta_ms": -0.20676791667938232,
+      "relative": 0.9403832899774759,
+      "attention_M_over_M1": 2.0584582576604733
+    },
+    {
+      "mode": "batch",
+      "m": 1,
+      "mt2_ms": 1.5986239910125732,
+      "attention_ms": 1.5683040022850037,
+      "delta_ms": -0.03031998872756958,
+      "relative": 0.9810336959172214,
+      "attention_M_over_M1": 1.0
+    },
+    {
+      "mode": "batch",
+      "m": 2,
+      "mt2_ms": 2.2956960201263428,
+      "attention_ms": 2.1651840209960938,
+      "delta_ms": -0.13051199913024902,
+      "relative": 0.9431492680276258,
+      "attention_M_over_M1": 1.3805894889265358
+    },
+    {
+      "mode": "batch",
+      "m": 4,
+      "mt2_ms": 3.5227679014205933,
+      "attention_ms": 3.2409600019454956,
+      "delta_ms": -0.28180789947509766,
+      "relative": 0.9200038414788962,
+      "attention_M_over_M1": 2.0665381183899605
+    }
+  ],
+  "attention": [
+    {
+      "variant": "mt2",
+      "mode": "causal",
+      "owned_M1_ms": 0.10992249322493225,
+      "owned_M4_ms": 0.5386476964769648,
+      "owned_extra_ms": 0.4287252032520325,
+      "whole_attention_M1_ms": 0.1715728997289973,
+      "whole_attention_M4_ms": 0.7357132791327913,
+      "whole_attention_ratio": 4.288050620435189,
+      "batch_owned_target_pass": null,
+      "causal_whole_target_pass": false,
+      "method": "Sum of clock-derived category medians; excludes ending grid barrier and pro_attnc. Owned extra uses scan/prologue/append per assignment baseline; whole attention also includes partial merge."
+    },
+    {
+      "variant": "attention",
+      "mode": "causal",
+      "owned_M1_ms": 0.11277529810298102,
+      "owned_M4_ms": 0.3931859078590786,
+      "owned_extra_ms": 0.28041060975609755,
+      "whole_attention_M1_ms": 0.14738474254742545,
+      "whole_attention_M4_ms": 0.5224872628726287,
+      "whole_attention_ratio": 3.5450566581171237,
+      "batch_owned_target_pass": null,
+      "causal_whole_target_pass": false,
+      "method": "Sum of clock-derived category medians; excludes ending grid barrier and pro_attnc. Owned extra uses scan/prologue/append per assignment baseline; whole attention also includes partial merge."
+    },
+    {
+      "variant": "mt2",
+      "mode": "batch",
+      "owned_M1_ms": 0.11017452574525745,
+      "owned_M4_ms": 0.5484352303523036,
+      "owned_extra_ms": 0.43826070460704614,
+      "whole_attention_M1_ms": 0.16847835088186947,
+      "whole_attention_M4_ms": 0.768630894308943,
+      "whole_attention_ratio": 4.562193838470543,
+      "batch_owned_target_pass": false,
+      "causal_whole_target_pass": null,
+      "method": "Sum of clock-derived category medians; excludes ending grid barrier and pro_attnc. Owned extra uses scan/prologue/append per assignment baseline; whole attention also includes partial merge."
+    },
+    {
+      "variant": "attention",
+      "mode": "batch",
+      "owned_M1_ms": 0.11295718157181571,
+      "owned_M4_ms": 0.40239945799457993,
+      "owned_extra_ms": 0.2894422764227642,
+      "whole_attention_M1_ms": 0.1479160704607046,
+      "whole_attention_M4_ms": 0.49950677506775065,
+      "whole_attention_ratio": 3.376960823201761,
+      "batch_owned_target_pass": false,
+      "causal_whole_target_pass": null,
+      "method": "Sum of clock-derived category medians; excludes ending grid barrier and pro_attnc. Owned extra uses scan/prologue/append per assignment baseline; whole attention also includes partial merge."
+    }
+  ],
+  "causal_byte_model": [
+    {
+      "context": 128,
+      "m": 1,
+      "physical_warps": 32,
+      "serial_logical_kv_bytes_per_pass": 29130752,
+      "register_tile_logical_kv_bytes_per_pass": 29130752,
+      "register_over_serial": 1.0,
+      "method": "Historical-row address model, including GQA head duplication, not DRAM traffic. Warp-private register tile shares rows across queries; preserved per-query partition boundaries cause bounded cross-warp duplicates."
+    },
+    {
+      "context": 128,
+      "m": 2,
+      "physical_warps": 16,
+      "serial_logical_kv_bytes_per_pass": 58261504,
+      "register_tile_logical_kv_bytes_per_pass": 50462720,
+      "register_over_serial": 0.8661417322834646,
+      "method": "Historical-row address model, including GQA head duplication, not DRAM traffic. Warp-private register tile shares rows across queries; preserved per-query partition boundaries cause bounded cross-warp duplicates."
+    },
+    {
+      "context": 128,
+      "m": 4,
+      "physical_warps": 16,
+      "serial_logical_kv_bytes_per_pass": 116523008,
+      "register_tile_logical_kv_bytes_per_pass": 68812800,
+      "register_over_serial": 0.5905511811023622,
+      "method": "Historical-row address model, including GQA head duplication, not DRAM traffic. Warp-private register tile shares rows across queries; preserved per-query partition boundaries cause bounded cross-warp duplicates."
+    },
+    {
+      "context": 2048,
+      "m": 1,
+      "physical_warps": 32,
+      "serial_logical_kv_bytes_per_pass": 469532672,
+      "register_tile_logical_kv_bytes_per_pass": 469532672,
+      "register_over_serial": 1.0,
+      "method": "Historical-row address model, including GQA head duplication, not DRAM traffic. Warp-private register tile shares rows across queries; preserved per-query partition boundaries cause bounded cross-warp duplicates."
+    },
+    {
+      "context": 2048,
+      "m": 2,
+      "physical_warps": 16,
+      "serial_logical_kv_bytes_per_pass": 939065344,
+      "register_tile_logical_kv_bytes_per_pass": 590643200,
+      "register_over_serial": 0.6289692232535418,
+      "method": "Historical-row address model, including GQA head duplication, not DRAM traffic. Warp-private register tile shares rows across queries; preserved per-query partition boundaries cause bounded cross-warp duplicates."
+    },
+    {
+      "context": 2048,
+      "m": 4,
+      "physical_warps": 16,
+      "serial_logical_kv_bytes_per_pass": 1878130688,
+      "register_tile_logical_kv_bytes_per_pass": 711294976,
+      "register_over_serial": 0.37872496336101613,
+      "method": "Historical-row address model, including GQA head duplication, not DRAM traffic. Warp-private register tile shares rows across queries; preserved per-query partition boundaries cause bounded cross-warp duplicates."
+    },
+    {
+      "context": 8192,
+      "m": 1,
+      "physical_warps": 32,
+      "serial_logical_kv_bytes_per_pass": 1878818816,
+      "register_tile_logical_kv_bytes_per_pass": 1878818816,
+      "register_over_serial": 1.0,
+      "method": "Historical-row address model, including GQA head duplication, not DRAM traffic. Warp-private register tile shares rows across queries; preserved per-query partition boundaries cause bounded cross-warp duplicates."
+    },
+    {
+      "context": 8192,
+      "m": 2,
+      "physical_warps": 16,
+      "serial_logical_kv_bytes_per_pass": 3757637632,
+      "register_tile_logical_kv_bytes_per_pass": 1999929344,
+      "register_over_serial": 0.532230496886827,
+      "method": "Historical-row address model, including GQA head duplication, not DRAM traffic. Warp-private register tile shares rows across queries; preserved per-query partition boundaries cause bounded cross-warp duplicates."
+    },
+    {
+      "context": 8192,
+      "m": 4,
+      "physical_warps": 16,
+      "serial_logical_kv_bytes_per_pass": 7515275264,
+      "register_tile_logical_kv_bytes_per_pass": 2121039872,
+      "register_over_serial": 0.282230496886827,
+      "method": "Historical-row address model, including GQA head duplication, not DRAM traffic. Warp-private register tile shares rows across queries; preserved per-query partition boundaries cause bounded cross-warp duplicates."
+    }
+  ],
+  "context_sweep": [
+    {
+      "context": 128,
+      "mt2_m1_ms": 1.6183039546012878,
+      "tile_m1_ms": 1.584447979927063,
+      "mt2_m4_ms": 3.468287944793701,
+      "tile_m4_ms": 3.261520028114319,
+      "m4_full_relative": 0.9403832899774759,
+      "tile_full_m4_over_m1": 2.0584582576604733,
+      "mt2_attention_m1_ms": 0.1715728997289973,
+      "tile_attention_m1_ms": 0.14738474254742545,
+      "mt2_attention_m4_ms": 0.7357132791327913,
+      "tile_attention_m4_ms": 0.5224872628726287,
+      "m4_attention_relative": 0.7101778338002831,
+      "tile_attention_m4_over_m1": 3.5450566581171237
+    },
+    {
+      "context": 2048,
+      "mt2_m1_ms": 2.2392640113830566,
+      "tile_m1_ms": 2.243135929107666,
+      "mt2_m4_ms": 7.932384014129639,
+      "tile_m4_ms": 5.8471999168396,
+      "m4_full_relative": 0.7371302128621378,
+      "tile_full_m4_over_m1": 2.6067077973137605,
+      "mt2_attention_m1_ms": 0.7880704607046072,
+      "tile_attention_m1_ms": 0.7927214092140921,
+      "mt2_attention_m4_ms": 5.183307317073171,
+      "tile_attention_m4_ms": 3.0888346883468834,
+      "m4_attention_relative": 0.5959196511795943,
+      "tile_attention_m4_over_m1": 3.8964945975272314
+    },
+    {
+      "context": 8192,
+      "mt2_m1_ms": 4.554880142211914,
+      "tile_m1_ms": 4.530176162719727,
+      "mt2_m4_ms": 21.937055587768555,
+      "tile_m4_ms": 13.20742416381836,
+      "m4_full_relative": 0.6020600217279125,
+      "tile_full_m4_over_m1": 2.9154327976263907,
+      "mt2_attention_m1_ms": 2.9903491075514874,
+      "tile_attention_m1_ms": 3.1011368013338463,
+      "mt2_attention_m4_ms": 19.919360705311057,
+      "tile_attention_m4_ms": 10.54458291792631,
+      "m4_attention_relative": 0.5293635209444664,
+      "tile_attention_m4_over_m1": 3.40023146137601
+    }
+  ],
+  "crossover": {
+    "first_tested_winning_context": 128,
+    "last_tested_losing_context": null,
+    "method": "Observed sampled contexts, not an interpolated exact crossover. Full-pass M4 median is the selection criterion."
+  }
+}

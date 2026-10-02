@@ -1,0 +1,85 @@
+[
+  {
+    "tag": "measured",
+    "m": 1,
+    "threads": 512,
+    "stack_spill_bytes": [
+      [
+        "0",
+        "0",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "0"
+      ]
+    ],
+    "command": [
+      "/home/dell/.local/cuda-13.3/bin/nvcc",
+      "-O3",
+      "-arch=sm_75",
+      "-std=c++17",
+      "-allow-unsupported-compiler",
+      "-L/home/dell/.local/cuda-13.3/lib",
+      "-I/home/dell/Projects/latticemk/kernels/megakernel_mt3",
+      "-Xcompiler",
+      "-fPIC",
+      "-shared",
+      "-cudart",
+      "static",
+      "--fmad=false",
+      "-Xptxas=-v",
+      "-DMT=1",
+      "-DTHREADS=512",
+      "/home/dell/Projects/latticemk/gate/build/lm23-thread-trade/inline.cu",
+      "-o",
+      "/home/dell/Projects/latticemk/gate/build/lm23-thread-trade/libmt1.so"
+    ],
+    "log": "gate/build/lm23-thread-trade/build-m1.log"
+  },
+  {
+    "tag": "measured",
+    "m": 5,
+    "threads": 256,
+    "stack_spill_bytes": [
+      [
+        "0",
+        "0",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "0"
+      ]
+    ],
+    "command": [
+      "/home/dell/.local/cuda-13.3/bin/nvcc",
+      "-O3",
+      "-arch=sm_75",
+      "-std=c++17",
+      "-allow-unsupported-compiler",
+      "-L/home/dell/.local/cuda-13.3/lib",
+      "-I/home/dell/Projects/latticemk/kernels/megakernel_mt3",
+      "-Xcompiler",
+      "-fPIC",
+      "-shared",
+      "-cudart",
+      "static",
+      "--fmad=false",
+      "-Xptxas=-v",
+      "-DMT=5",
+      "-DTHREADS=256",
+      "/home/dell/Projects/latticemk/gate/build/lm23-thread-trade/inline.cu",
+      "-o",
+      "/home/dell/Projects/latticemk/gate/build/lm23-thread-trade/libmt5.so"
+    ],
+    "log": "gate/build/lm23-thread-trade/build-m5.log"
+  }
+]

@@ -1,0 +1,6 @@
+{
+  "nvcc_flags": ["--fmad=false"],
+  "threads": {"1": 1024, "2": 512, "3": 512, "4": 512, "5": 512},
+  "seq_lib": "libmt1.so",
+  "note": "Matches build.sh variant 'selected' (the LM-18 production build)."
+}

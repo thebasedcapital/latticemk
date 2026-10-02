@@ -1,0 +1,28 @@
+{
+  "variant": "sw1",
+  "m": 4,
+  "range_hex": [
+    "2830",
+    "3950"
+  ],
+  "method": "static disassembly first unrolled 128-K group; excludes group loads and loop control; not retired counters",
+  "instructions": {
+    "SHFL.IDX": 32,
+    "IMAD.MOV.U32": 30,
+    "SHF.R.U32.HI": 32,
+    "LOP3.LUT": 48,
+    "HADD2": 32,
+    "HFMA2": 32,
+    "ISETP.GT.U32.AND": 1,
+    "WARPSYNC": 1,
+    "IMAD": 16,
+    "LDS.U": 16,
+    "HMMA.1688.F32": 16,
+    "BRA.DIV": 1,
+    "IADD3": 16,
+    "CS2R": 1,
+    "ISETP.NE.AND": 1
+  },
+  "instructions_total": 275,
+  "HMMA_total_across_four_width_branches": 64
+}

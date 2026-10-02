@@ -1,0 +1,11 @@
+ptxas info    : 0 bytes gmem
+ptxas info    : Compiling entry function '_Z9mt_matvecPK2P2' for 'sm_75'
+ptxas info    : Function properties for _Z9mt_matvecPK2P2
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 123 registers, used 1 barriers, 30720 bytes smem, 360 bytes cmem[0]
+ptxas info    : Compile time = 214.256 ms
+ptxas info    : Compiling entry function '_Z7mega_mtPK2P2' for 'sm_75'
+ptxas info    : Function properties for _Z7mega_mtPK2P2
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 126 registers, used 1 barriers, 41952 bytes smem, 360 bytes cmem[0], 8 bytes cmem[2]
+ptxas info    : Compile time = 2843.611 ms

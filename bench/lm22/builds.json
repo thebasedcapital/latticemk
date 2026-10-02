@@ -1,0 +1,326 @@
+[
+  {
+    "log": "build-mma-m1.log",
+    "entry": "_Z9mt_matvecPK2P2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 72,
+    "smem": 16640
+  },
+  {
+    "log": "build-mma-m1.log",
+    "entry": "_Z7mega_mtPK2P2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 120,
+    "smem": 19776
+  },
+  {
+    "log": "build-mma-m2.log",
+    "entry": "_Z9mt_matvecPK2P2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 96,
+    "smem": 16640
+  },
+  {
+    "log": "build-mma-m2.log",
+    "entry": "_Z7mega_mtPK2P2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 128,
+    "smem": 21824
+  },
+  {
+    "log": "build-mma-m3.log",
+    "entry": "_Z9mt_matvecPK2P2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 119,
+    "smem": 18432
+  },
+  {
+    "log": "build-mma-m3.log",
+    "entry": "_Z7mega_mtPK2P2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 128,
+    "smem": 25664
+  },
+  {
+    "log": "build-mma-m4.log",
+    "entry": "_Z9mt_matvecPK2P2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 128,
+    "smem": 24576
+  },
+  {
+    "log": "build-mma-m4.log",
+    "entry": "_Z7mega_mtPK2P2",
+    "stack_bytes": 32,
+    "spill_stores": 28,
+    "spill_loads": 140,
+    "registers": 128,
+    "smem": 33856
+  },
+  {
+    "log": "build-mma-m5.log",
+    "entry": "_Z9mt_matvecPK2P2",
+    "stack_bytes": 40,
+    "spill_stores": 60,
+    "spill_loads": 60,
+    "registers": 128,
+    "smem": 30720
+  },
+  {
+    "log": "build-mma-m5.log",
+    "entry": "_Z7mega_mtPK2P2",
+    "stack_bytes": 104,
+    "spill_stores": 100,
+    "spill_loads": 500,
+    "registers": 128,
+    "smem": 42048
+  },
+  {
+    "log": "build-shape-cuda-m1.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 60,
+    "smem": 6144
+  },
+  {
+    "log": "build-shape-cuda-m2.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 89,
+    "smem": 12288
+  },
+  {
+    "log": "build-shape-cuda-m4.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 109,
+    "smem": 24576
+  },
+  {
+    "log": "build-shape-mma1-m1.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 60,
+    "smem": 6144
+  },
+  {
+    "log": "build-shape-mma1-m2.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 64,
+    "smem": 12288
+  },
+  {
+    "log": "build-shape-mma1-m4.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 63,
+    "smem": 24576
+  },
+  {
+    "log": "build-shape-mma4-m1.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 53,
+    "smem": 14336
+  },
+  {
+    "log": "build-shape-mma4-m2.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 57,
+    "smem": 20480
+  },
+  {
+    "log": "build-shape-mma4-m4.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 59,
+    "smem": 32768
+  },
+  {
+    "log": "build-shape-mma8-m1.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 53,
+    "smem": 14336
+  },
+  {
+    "log": "build-shape-mma8-m2.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 57,
+    "smem": 20480
+  },
+  {
+    "log": "build-shape-mma8-m4.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 59,
+    "smem": 32768
+  },
+  {
+    "log": "build-shape-sw1-m1.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 58,
+    "smem": 6144
+  },
+  {
+    "log": "build-shape-sw1-m2.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 63,
+    "smem": 12288
+  },
+  {
+    "log": "build-shape-sw1-m3.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 64,
+    "smem": 18432
+  },
+  {
+    "log": "build-shape-sw1-m4.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 64,
+    "smem": 24576
+  },
+  {
+    "log": "build-shape-sw1-m5.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 64,
+    "smem": 30720
+  },
+  {
+    "log": "build-shape-sw1-m6.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 68,
+    "smem": 36864
+  },
+  {
+    "log": "build-shape-sw1-m7.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 77,
+    "smem": 43008
+  },
+  {
+    "log": "build-shape-sw1-m8.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 84,
+    "smem": 49152
+  },
+  {
+    "log": "build-shape-sw4-m1.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 56,
+    "smem": 14336
+  },
+  {
+    "log": "build-shape-sw4-m2.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 59,
+    "smem": 20480
+  },
+  {
+    "log": "build-shape-sw4-m4.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 57,
+    "smem": 32768
+  },
+  {
+    "log": "build-shape-sw8-m1.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 56,
+    "smem": 14336
+  },
+  {
+    "log": "build-shape-sw8-m2.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 59,
+    "smem": 20480
+  },
+  {
+    "log": "build-shape-sw8-m4.log",
+    "entry": "_Z5shape2W2",
+    "stack_bytes": 0,
+    "spill_stores": 0,
+    "spill_loads": 0,
+    "registers": 57,
+    "smem": 32768
+  }
+]

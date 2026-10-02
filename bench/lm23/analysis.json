@@ -1,0 +1,896 @@
+{
+  "builds": [
+    {
+      "tag": "measured",
+      "m": 1,
+      "threads": 1024,
+      "registers": 64,
+      "static_smem_bytes": 19876,
+      "stack_bytes": 0,
+      "spill_store_bytes": 0,
+      "spill_load_bytes": 0,
+      "source": "kernels/megakernel_mt3/build-selected-m1.log"
+    },
+    {
+      "tag": "measured",
+      "m": 2,
+      "threads": 512,
+      "registers": 117,
+      "static_smem_bytes": 39352,
+      "stack_bytes": 0,
+      "spill_store_bytes": 0,
+      "spill_load_bytes": 0,
+      "source": "kernels/megakernel_mt3/build-selected-m2.log"
+    },
+    {
+      "tag": "measured",
+      "m": 3,
+      "threads": 512,
+      "registers": 127,
+      "static_smem_bytes": 42184,
+      "stack_bytes": 0,
+      "spill_store_bytes": 0,
+      "spill_load_bytes": 0,
+      "source": "kernels/megakernel_mt3/build-selected-m3.log"
+    },
+    {
+      "tag": "measured",
+      "m": 4,
+      "threads": 512,
+      "registers": 128,
+      "static_smem_bytes": 45016,
+      "stack_bytes": 0,
+      "spill_store_bytes": 0,
+      "spill_load_bytes": 0,
+      "source": "kernels/megakernel_mt3/build-selected-m4.log"
+    },
+    {
+      "tag": "measured",
+      "m": 5,
+      "threads": 512,
+      "registers": 128,
+      "static_smem_bytes": 47848,
+      "stack_bytes": 0,
+      "spill_store_bytes": 0,
+      "spill_load_bytes": 0,
+      "source": "kernels/megakernel_mt3/build-selected-m5.log"
+    }
+  ],
+  "matrix": [
+    {
+      "tag": "derived",
+      "mode": "batch",
+      "context": 128,
+      "m": 1,
+      "mt2_ms": 1.6033600568771362,
+      "mt3_ms": 1.5032320022583008,
+      "delta_ms": -0.10012805461883545,
+      "new_over_old": 0.9375511107505978,
+      "new_over_m1": 1.0,
+      "p10_ms": 1.4937024354934691,
+      "p90_ms": 1.5299199581146241,
+      "sm_clock_mhz": 1770
+    },
+    {
+      "tag": "derived",
+      "mode": "batch",
+      "context": 128,
+      "m": 2,
+      "mt2_ms": 2.309760093688965,
+      "mt3_ms": 1.9419840574264526,
+      "delta_ms": -0.3677760362625122,
+      "new_over_old": 0.8407730580905788,
+      "new_over_m1": 1.2918724817653005,
+      "p10_ms": 1.9335936069488526,
+      "p90_ms": 2.0271231174468993,
+      "sm_clock_mhz": 1770
+    },
+    {
+      "tag": "derived",
+      "mode": "batch",
+      "context": 128,
+      "m": 3,
+      "mt2_ms": 2.8866240978240967,
+      "mt3_ms": 2.4328958988189697,
+      "delta_ms": -0.45372819900512695,
+      "new_over_old": 0.8428170126664078,
+      "new_over_m1": 1.618443390750089,
+      "p10_ms": 2.424281644821167,
+      "p90_ms": 2.5244543552398686,
+      "sm_clock_mhz": 1770
+    },
+    {
+      "tag": "derived",
+      "mode": "batch",
+      "context": 128,
+      "m": 4,
+      "mt2_ms": 3.5174400806427,
+      "mt3_ms": 2.7580480575561523,
+      "delta_ms": -0.7593920230865479,
+      "new_over_old": 0.784106621384779,
+      "new_over_m1": 1.8347454374392944,
+      "p10_ms": 2.7498751640319825,
+      "p90_ms": 2.8131328105926516,
+      "sm_clock_mhz": 1770
+    },
+    {
+      "tag": "derived",
+      "mode": "batch",
+      "context": 128,
+      "m": 5,
+      "mt2_ms": 4.100063800811768,
+      "mt3_ms": 3.4189438819885254,
+      "delta_ms": -0.6811199188232422,
+      "new_over_old": 0.8338757756188117,
+      "new_over_m1": 2.2743953540453212,
+      "p10_ms": 3.407251262664795,
+      "p90_ms": 3.5369343757629395,
+      "sm_clock_mhz": 1770
+    },
+    {
+      "tag": "derived",
+      "mode": "batch",
+      "context": 2048,
+      "m": 1,
+      "mt2_ms": 2.316864013671875,
+      "mt3_ms": 2.2034239768981934,
+      "delta_ms": -0.11344003677368164,
+      "new_over_old": 0.9510372485807242,
+      "new_over_m1": 1.0,
+      "p10_ms": 2.1638272762298585,
+      "p90_ms": 2.228403186798096,
+      "sm_clock_mhz": 1740
+    },
+    {
+      "tag": "derived",
+      "mode": "batch",
+      "context": 2048,
+      "m": 2,
+      "mt2_ms": 4.5893120765686035,
+      "mt3_ms": 4.149824142456055,
+      "delta_ms": -0.43948793411254883,
+      "new_over_old": 0.9042366422722878,
+      "new_over_m1": 1.8833525394862274,
+      "p10_ms": 4.0781121253967285,
+      "p90_ms": 4.208780765533447,
+      "sm_clock_mhz": 1740
+    },
+    {
+      "tag": "derived",
+      "mode": "batch",
+      "context": 2048,
+      "m": 3,
+      "mt2_ms": 6.38592004776001,
+      "mt3_ms": 6.76310396194458,
+      "delta_ms": 0.3771839141845703,
+      "new_over_old": 1.0590649289943546,
+      "new_over_m1": 3.0693611546630915,
+      "p10_ms": 6.595116710662841,
+      "p90_ms": 6.921792125701905,
+      "sm_clock_mhz": 1740
+    },
+    {
+      "tag": "derived",
+      "mode": "batch",
+      "context": 2048,
+      "m": 4,
+      "mt2_ms": 8.053119659423828,
+      "mt3_ms": 7.222208023071289,
+      "delta_ms": -0.8309116363525391,
+      "new_over_old": 0.8968211486364542,
+      "new_over_m1": 3.27772053803197,
+      "p10_ms": 7.082431983947754,
+      "p90_ms": 7.432467365264893,
+      "sm_clock_mhz": 1740
+    },
+    {
+      "tag": "derived",
+      "mode": "batch",
+      "context": 2048,
+      "m": 5,
+      "mt2_ms": 9.610431671142578,
+      "mt3_ms": 10.369919776916504,
+      "delta_ms": 0.7594881057739258,
+      "new_over_old": 1.0790274705406266,
+      "new_over_m1": 4.706275272321608,
+      "p10_ms": 10.139916610717773,
+      "p90_ms": 10.558118629455567,
+      "sm_clock_mhz": 1740
+    },
+    {
+      "tag": "derived",
+      "mode": "causal",
+      "context": 128,
+      "m": 1,
+      "mt2_ms": 1.5931520462036133,
+      "mt3_ms": 1.4969600439071655,
+      "delta_ms": -0.09619200229644775,
+      "new_over_old": 0.9396215806735663,
+      "new_over_m1": 1.0,
+      "p10_ms": 1.4853952169418334,
+      "p90_ms": 1.5237119913101196,
+      "sm_clock_mhz": 1785
+    },
+    {
+      "tag": "derived",
+      "mode": "causal",
+      "context": 128,
+      "m": 2,
+      "mt2_ms": 2.273184061050415,
+      "mt3_ms": 1.9860800504684448,
+      "delta_ms": -0.2871040105819702,
+      "new_over_old": 0.8736996200609896,
+      "new_over_m1": 1.3267421923197384,
+      "p10_ms": 1.9711552381515502,
+      "p90_ms": 2.0734015464782716,
+      "sm_clock_mhz": 1785
+    },
+    {
+      "tag": "derived",
+      "mode": "causal",
+      "context": 128,
+      "m": 3,
+      "mt2_ms": 2.8290560245513916,
+      "mt3_ms": 2.371583938598633,
+      "delta_ms": -0.4574720859527588,
+      "new_over_old": 0.8382951479282561,
+      "new_over_m1": 1.5842666931901808,
+      "p10_ms": 2.353446435928345,
+      "p90_ms": 2.4438655853271483,
+      "sm_clock_mhz": 1785
+    },
+    {
+      "tag": "derived",
+      "mode": "causal",
+      "context": 128,
+      "m": 4,
+      "mt2_ms": 3.465087890625,
+      "mt3_ms": 2.826047897338867,
+      "delta_ms": -0.6390399932861328,
+      "new_over_old": 0.8155775514338054,
+      "new_over_m1": 1.88785793504728,
+      "p10_ms": 2.8093632221221925,
+      "p90_ms": 2.880454397201538,
+      "sm_clock_mhz": 1785
+    },
+    {
+      "tag": "derived",
+      "mode": "causal",
+      "context": 128,
+      "m": 5,
+      "mt2_ms": 4.018688201904297,
+      "mt3_ms": 3.2911360263824463,
+      "delta_ms": -0.7275521755218506,
+      "new_over_old": 0.8189577944422032,
+      "new_over_m1": 2.1985463404837193,
+      "p10_ms": 3.2661311626434326,
+      "p90_ms": 3.400051164627075,
+      "sm_clock_mhz": 1785
+    },
+    {
+      "tag": "derived",
+      "mode": "causal",
+      "context": 2048,
+      "m": 1,
+      "mt2_ms": 2.283519983291626,
+      "mt3_ms": 2.2411839962005615,
+      "delta_ms": -0.04233598709106445,
+      "new_over_old": 0.9814602073111537,
+      "new_over_m1": 1.0,
+      "p10_ms": 2.1950911045074464,
+      "p90_ms": 2.2745471954345704,
+      "sm_clock_mhz": 1725
+    },
+    {
+      "tag": "derived",
+      "mode": "causal",
+      "context": 2048,
+      "m": 2,
+      "mt2_ms": 4.593503952026367,
+      "mt3_ms": 3.8297600746154785,
+      "delta_ms": -0.7637438774108887,
+      "new_over_old": 0.8337339239527654,
+      "new_over_m1": 1.708811093202522,
+      "p10_ms": 3.748684787750244,
+      "p90_ms": 3.9026623725891114,
+      "sm_clock_mhz": 1725
+    },
+    {
+      "tag": "derived",
+      "mode": "causal",
+      "context": 2048,
+      "m": 3,
+      "mt2_ms": 6.407328128814697,
+      "mt3_ms": 4.700319766998291,
+      "delta_ms": -1.7070083618164062,
+      "new_over_old": 0.7335849940102586,
+      "new_over_m1": 2.097248496761827,
+      "p10_ms": 4.524032115936279,
+      "p90_ms": 4.793907165527344,
+      "sm_clock_mhz": 1725
+    },
+    {
+      "tag": "derived",
+      "mode": "causal",
+      "context": 2048,
+      "m": 4,
+      "mt2_ms": 8.144895553588867,
+      "mt3_ms": 5.52345609664917,
+      "delta_ms": -2.6214394569396973,
+      "new_over_old": 0.678149407847886,
+      "new_over_m1": 2.4645259407585387,
+      "p10_ms": 5.427199840545654,
+      "p90_ms": 5.740505504608154,
+      "sm_clock_mhz": 1725
+    },
+    {
+      "tag": "derived",
+      "mode": "causal",
+      "context": 2048,
+      "m": 5,
+      "mt2_ms": 9.668607711791992,
+      "mt3_ms": 6.494207859039307,
+      "delta_ms": -3.1743998527526855,
+      "new_over_old": 0.6716797343136452,
+      "new_over_m1": 2.8976683173040763,
+      "p10_ms": 6.357529735565185,
+      "p90_ms": 6.616569519042969,
+      "sm_clock_mhz": 1725
+    },
+    {
+      "tag": "derived",
+      "mode": "causal",
+      "context": 8192,
+      "m": 1,
+      "mt2_ms": 4.61846399307251,
+      "mt3_ms": 4.704895973205566,
+      "delta_ms": 0.08643198013305664,
+      "new_over_old": 1.0187144427806951,
+      "new_over_m1": 1.0,
+      "p10_ms": 4.5795008659362795,
+      "p90_ms": 4.732479858398437,
+      "sm_clock_mhz": 1695
+    },
+    {
+      "tag": "derived",
+      "mode": "causal",
+      "context": 8192,
+      "m": 2,
+      "mt2_ms": 11.970656394958496,
+      "mt3_ms": 8.696895599365234,
+      "delta_ms": -3.2737607955932617,
+      "new_over_old": 0.7265178543616019,
+      "new_over_m1": 1.8484777663298295,
+      "p10_ms": 8.275628662109375,
+      "p90_ms": 8.876422309875489,
+      "sm_clock_mhz": 1695
+    },
+    {
+      "tag": "derived",
+      "mode": "causal",
+      "context": 8192,
+      "m": 3,
+      "mt2_ms": 17.462656021118164,
+      "mt3_ms": 10.82863998413086,
+      "delta_ms": -6.634016036987305,
+      "new_over_old": 0.6201026906236616,
+      "new_over_m1": 2.301568418473029,
+      "p10_ms": 10.110463714599609,
+      "p90_ms": 10.930124664306641,
+      "sm_clock_mhz": 1695
+    },
+    {
+      "tag": "derived",
+      "mode": "causal",
+      "context": 8192,
+      "m": 4,
+      "mt2_ms": 22.981088638305664,
+      "mt3_ms": 13.240351676940918,
+      "delta_ms": -9.740736961364746,
+      "new_over_old": 0.5761411865785787,
+      "new_over_m1": 2.8141645962726622,
+      "p10_ms": 12.627967834472656,
+      "p90_ms": 13.471468734741212,
+      "sm_clock_mhz": 1695
+    },
+    {
+      "tag": "derived",
+      "mode": "causal",
+      "context": 8192,
+      "m": 5,
+      "mt2_ms": 27.67401695251465,
+      "mt3_ms": 15.364992141723633,
+      "delta_ms": -12.309024810791016,
+      "new_over_old": 0.5552136564810287,
+      "new_over_m1": 3.265745348935966,
+      "p10_ms": 14.65798397064209,
+      "p90_ms": 15.538521575927735,
+      "sm_clock_mhz": 1695
+    }
+  ],
+  "ratios": [
+    {
+      "tag": "derived",
+      "mode": "batch",
+      "context": 128,
+      "mt2_m4_over_m1": 2.19379300710136,
+      "mt3_m4_over_m1": 1.8347454374392944,
+      "target_met": false,
+      "mt3_m1_over_v2": 0.9130063039308938
+    },
+    {
+      "tag": "derived",
+      "mode": "batch",
+      "context": 2048,
+      "mt2_m4_over_m1": 3.475870664787471,
+      "mt3_m4_over_m1": 3.27772053803197,
+      "target_met": false,
+      "mt3_m1_over_v2": 0.9509846968086272
+    },
+    {
+      "tag": "derived",
+      "mode": "causal",
+      "context": 128,
+      "mt2_m4_over_m1": 2.174988820986734,
+      "mt3_m4_over_m1": 1.88785793504728,
+      "target_met": false,
+      "mt3_m1_over_v2": 0.9108610514142003
+    },
+    {
+      "tag": "derived",
+      "mode": "causal",
+      "context": 2048,
+      "mt2_m4_over_m1": 3.5668159741033856,
+      "mt3_m4_over_m1": 2.4645259407585387,
+      "target_met": false,
+      "mt3_m1_over_v2": 0.9691690403911892
+    },
+    {
+      "tag": "derived",
+      "mode": "causal",
+      "context": 8192,
+      "mt2_m4_over_m1": 4.975915947981033,
+      "mt3_m4_over_m1": 2.8141645962726622,
+      "target_met": false,
+      "mt3_m1_over_v2": null
+    }
+  ],
+  "breakeven": [
+    {
+      "tag": "derived",
+      "context": 128,
+      "k": 2,
+      "verify_over_plain": 1.3267421923197384,
+      "accepted_only_min_mean_strictly_greater_than": 1.3267421923197384,
+      "mandatory_anchor_plus_bonus_min_accepted_drafts_strictly_greater_than": 0.32674219231973844,
+      "anchor_draft_capacity": 1,
+      "anchor_min_fraction_strictly_greater_than": 0.32674219231973844,
+      "max_speedup_all_accepted": 1.5074518708891784,
+      "assumption": "CPU n-gram/prompt-lookup drafting cost approximately 0; mandatory anchor consumes one input column, and rejection/all-accepted bonus commits one target token. No host rollout/KV rollback overhead measured."
+    },
+    {
+      "tag": "derived",
+      "context": 128,
+      "k": 3,
+      "verify_over_plain": 1.5842666931901808,
+      "accepted_only_min_mean_strictly_greater_than": 1.5842666931901808,
+      "mandatory_anchor_plus_bonus_min_accepted_drafts_strictly_greater_than": 0.5842666931901808,
+      "anchor_draft_capacity": 2,
+      "anchor_min_fraction_strictly_greater_than": 0.2921333465950904,
+      "max_speedup_all_accepted": 1.8936205708894933,
+      "assumption": "CPU n-gram/prompt-lookup drafting cost approximately 0; mandatory anchor consumes one input column, and rejection/all-accepted bonus commits one target token. No host rollout/KV rollback overhead measured."
+    },
+    {
+      "tag": "derived",
+      "context": 128,
+      "k": 4,
+      "verify_over_plain": 1.88785793504728,
+      "accepted_only_min_mean_strictly_greater_than": 1.88785793504728,
+      "mandatory_anchor_plus_bonus_min_accepted_drafts_strictly_greater_than": 0.88785793504728,
+      "anchor_draft_capacity": 3,
+      "anchor_min_fraction_strictly_greater_than": 0.29595264501575996,
+      "max_speedup_all_accepted": 2.1188034998511807,
+      "assumption": "CPU n-gram/prompt-lookup drafting cost approximately 0; mandatory anchor consumes one input column, and rejection/all-accepted bonus commits one target token. No host rollout/KV rollback overhead measured."
+    },
+    {
+      "tag": "derived",
+      "context": 2048,
+      "k": 2,
+      "verify_over_plain": 1.708811093202522,
+      "accepted_only_min_mean_strictly_greater_than": 1.708811093202522,
+      "mandatory_anchor_plus_bonus_min_accepted_drafts_strictly_greater_than": 0.708811093202522,
+      "anchor_draft_capacity": 1,
+      "anchor_min_fraction_strictly_greater_than": 0.708811093202522,
+      "max_speedup_all_accepted": 1.1704043869774712,
+      "assumption": "CPU n-gram/prompt-lookup drafting cost approximately 0; mandatory anchor consumes one input column, and rejection/all-accepted bonus commits one target token. No host rollout/KV rollback overhead measured."
+    },
+    {
+      "tag": "derived",
+      "context": 2048,
+      "k": 3,
+      "verify_over_plain": 2.097248496761827,
+      "accepted_only_min_mean_strictly_greater_than": 2.097248496761827,
+      "mandatory_anchor_plus_bonus_min_accepted_drafts_strictly_greater_than": 1.0972484967618268,
+      "anchor_draft_capacity": 2,
+      "anchor_min_fraction_strictly_greater_than": 0.5486242483809134,
+      "max_speedup_all_accepted": 1.430445655167726,
+      "assumption": "CPU n-gram/prompt-lookup drafting cost approximately 0; mandatory anchor consumes one input column, and rejection/all-accepted bonus commits one target token. No host rollout/KV rollback overhead measured."
+    },
+    {
+      "tag": "derived",
+      "context": 2048,
+      "k": 4,
+      "verify_over_plain": 2.4645259407585387,
+      "accepted_only_min_mean_strictly_greater_than": 2.4645259407585387,
+      "mandatory_anchor_plus_bonus_min_accepted_drafts_strictly_greater_than": 1.4645259407585387,
+      "anchor_draft_capacity": 3,
+      "anchor_min_fraction_strictly_greater_than": 0.48817531358617955,
+      "max_speedup_all_accepted": 1.6230301876103883,
+      "assumption": "CPU n-gram/prompt-lookup drafting cost approximately 0; mandatory anchor consumes one input column, and rejection/all-accepted bonus commits one target token. No host rollout/KV rollback overhead measured."
+    },
+    {
+      "tag": "derived",
+      "context": 8192,
+      "k": 2,
+      "verify_over_plain": 1.8484777663298295,
+      "accepted_only_min_mean_strictly_greater_than": 1.8484777663298295,
+      "mandatory_anchor_plus_bonus_min_accepted_drafts_strictly_greater_than": 0.8484777663298295,
+      "anchor_draft_capacity": 1,
+      "anchor_min_fraction_strictly_greater_than": 0.8484777663298295,
+      "max_speedup_all_accepted": 1.0819713585038242,
+      "assumption": "CPU n-gram/prompt-lookup drafting cost approximately 0; mandatory anchor consumes one input column, and rejection/all-accepted bonus commits one target token. No host rollout/KV rollback overhead measured."
+    },
+    {
+      "tag": "derived",
+      "context": 8192,
+      "k": 3,
+      "verify_over_plain": 2.301568418473029,
+      "accepted_only_min_mean_strictly_greater_than": 2.301568418473029,
+      "mandatory_anchor_plus_bonus_min_accepted_drafts_strictly_greater_than": 1.3015684184730292,
+      "anchor_draft_capacity": 2,
+      "anchor_min_fraction_strictly_greater_than": 0.6507842092365146,
+      "max_speedup_all_accepted": 1.3034589699446535,
+      "assumption": "CPU n-gram/prompt-lookup drafting cost approximately 0; mandatory anchor consumes one input column, and rejection/all-accepted bonus commits one target token. No host rollout/KV rollback overhead measured."
+    },
+    {
+      "tag": "derived",
+      "context": 8192,
+      "k": 4,
+      "verify_over_plain": 2.8141645962726622,
+      "accepted_only_min_mean_strictly_greater_than": 2.8141645962726622,
+      "mandatory_anchor_plus_bonus_min_accepted_drafts_strictly_greater_than": 1.8141645962726622,
+      "anchor_draft_capacity": 3,
+      "anchor_min_fraction_strictly_greater_than": 0.6047215320908874,
+      "max_speedup_all_accepted": 1.421380968724419,
+      "assumption": "CPU n-gram/prompt-lookup drafting cost approximately 0; mandatory anchor consumes one input column, and rejection/all-accepted bonus commits one target token. No host rollout/KV rollback overhead measured."
+    }
+  ],
+  "proofs": [
+    {
+      "mode": "batch",
+      "context": 128,
+      "m": 1,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "batch",
+      "context": 128,
+      "m": 2,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "batch",
+      "context": 128,
+      "m": 3,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "batch",
+      "context": 128,
+      "m": 4,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "batch",
+      "context": 128,
+      "m": 5,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "batch",
+      "context": 2048,
+      "m": 1,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "batch",
+      "context": 2048,
+      "m": 2,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "batch",
+      "context": 2048,
+      "m": 3,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "batch",
+      "context": 2048,
+      "m": 4,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "batch",
+      "context": 2048,
+      "m": 5,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "causal",
+      "context": 128,
+      "m": 1,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "causal",
+      "context": 128,
+      "m": 2,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "causal",
+      "context": 128,
+      "m": 3,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "causal",
+      "context": 128,
+      "m": 4,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "causal",
+      "context": 128,
+      "m": 5,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "causal",
+      "context": 2048,
+      "m": 1,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "causal",
+      "context": 2048,
+      "m": 2,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "causal",
+      "context": 2048,
+      "m": 3,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "causal",
+      "context": 2048,
+      "m": 4,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "causal",
+      "context": 2048,
+      "m": 5,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "causal",
+      "context": 8192,
+      "m": 1,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "causal",
+      "context": 8192,
+      "m": 2,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "causal",
+      "context": 8192,
+      "m": 3,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "causal",
+      "context": 8192,
+      "m": 4,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    },
+    {
+      "mode": "causal",
+      "context": 8192,
+      "m": 5,
+      "bitwise_vs_mt2": true,
+      "bitwise_repeat": true,
+      "bitwise_sequential": true,
+      "max_diff_sequential": 0.0,
+      "nonfinite": 0
+    }
+  ],
+  "gates": [
+    {
+      "library": "/home/dell/Projects/latticemk/kernels/megakernel_mt3/libmt2.so",
+      "m": 2,
+      "mode": "batch",
+      "passed": true,
+      "tiers": {
+        "1": true,
+        "2": true
+      }
+    },
+    {
+      "library": "/home/dell/Projects/latticemk/kernels/megakernel_mt3/libmt2.so",
+      "m": 2,
+      "mode": "causal",
+      "passed": true,
+      "tiers": {
+        "1": true,
+        "2": true
+      }
+    },
+    {
+      "library": "/home/dell/Projects/latticemk/kernels/megakernel_mt3/libmt4.so",
+      "m": 4,
+      "mode": "batch",
+      "passed": true,
+      "tiers": {
+        "1": true,
+        "2": true
+      }
+    },
+    {
+      "library": "/home/dell/Projects/latticemk/kernels/megakernel_mt3/libmt4.so",
+      "m": 4,
+      "mode": "causal",
+      "passed": true,
+      "tiers": {
+        "1": true,
+        "2": true,
+        "3": true
+      }
+    },
+    {
+      "library": "/home/dell/Projects/latticemk/kernels/megakernel_mt2/libmt4.so",
+      "m": 4,
+      "mode": "causal",
+      "passed": true,
+      "tiers": {
+        "1": true,
+        "2": true,
+        "3": true
+      }
+    },
+    {
+      "library": "/home/dell/Projects/latticemk/kernels/megakernel_v2/libmega2.so",
+      "m": 1,
+      "mode": "batch",
+      "passed": true,
+      "tiers": {
+        "1": true,
+        "2": true,
+        "3": true
+      }
+    },
+    {
+      "library": "/home/dell/Projects/latticemk/kernels/megakernel_mt/libmt4.so",
+      "m": 4,
+      "mode": "causal",
+      "passed": true,
+      "tiers": {
+        "1": true,
+        "2": true,
+        "3": true
+      }
+    }
+  ]
+}

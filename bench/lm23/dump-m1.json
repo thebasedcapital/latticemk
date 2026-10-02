@@ -1,0 +1,54 @@
+{
+  "tag": "measured",
+  "m": 1,
+  "mode": "causal",
+  "bitwise_equal": true,
+  "dumping_enabled": true,
+  "finite_complete_dumps": true,
+  "positions": 48,
+  "manifest": {
+    "version": "local-layer-v4",
+    "engine": "mt",
+    "m": 1,
+    "source": "/home/dell/Projects/latticemk/kernels/megakernel_mt3/mega_mt.cu",
+    "implementation_sha256": "c21f5ce310726d4ef94a6ab54d57847369ebe223d2de8c6cb658ef1dcc203944",
+    "source_sha256": "bbeea0b509e155703d812c0c4cc801f9fb32eb83a70457238f4131c0ed74f74a",
+    "library": "/home/dell/Projects/latticemk/kernels/megakernel_mt3/libmt1.so",
+    "library_sha256": "98dc9b77ca8e7f0afc9c7a95ad155faef634564b6b8f127f5ced0cb6b86481c9",
+    "defines": [
+      "MT=1",
+      "THREADS=1024"
+    ],
+    "nvcc_flags": [
+      "--fmad=false"
+    ],
+    "headers": {
+      "gemm.cuh": "3c678d707d54905a716f2234aaa5c79a3c81d6bdb9a26db1de98807a17b40009",
+      "gemm_nv.cuh": "f74f991200928be817e641c7a625976be47063ef9e8efc0a1a8e6acca79f81c8",
+      "gemm_original.cuh": "b4d99a2f6ec99b08ca021d16fe144da7107a4a6f713d176f32531b6e6f56840e",
+      "gemm_preload.cuh": "966ef0b568f00bd776e5fc598aa0a30451074ff3b0ed44caccb5dddfe5d7b6fa",
+      "profile_detail.cuh": "66c7443160f0cd0c3b6b7d343beed560b3f71177e278752f9352cf79fc54898e",
+      "mega_detail.cuh": "4c01b6624d718830d817dd191e217a9d9f94c5c4ab0b36a873ccada979010f13"
+    },
+    "command": [
+      "/home/dell/.local/cuda-13.3/bin/nvcc",
+      "-O3",
+      "-arch=sm_75",
+      "-std=c++17",
+      "-allow-unsupported-compiler",
+      "-L/home/dell/.local/cuda-13.3/lib",
+      "-I/home/dell/Projects/latticemk/gate/build/debug-mt-cc9a2596fc34a7476570",
+      "-Xcompiler",
+      "-fPIC",
+      "-shared",
+      "-cudart",
+      "static",
+      "--fmad=false",
+      "-DMT=1",
+      "-DTHREADS=1024",
+      "-o",
+      "/home/dell/Projects/latticemk/gate/build/debug-mt-cc9a2596fc34a7476570/debug.so",
+      "/home/dell/Projects/latticemk/gate/build/debug-mt-cc9a2596fc34a7476570/debug.cu"
+    ]
+  }
+}

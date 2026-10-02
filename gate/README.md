@@ -57,6 +57,10 @@ Tier 3a dumps all 28 actual hidden states and attention outputs during token tea
 
 `gate/layers.py` and `gate/debug.py` generate hash-bound HF and accepted-kernel calibration caches, including their own implementation hashes. `gate/calibration.json` records all measured per-layer values after validation. Before layer comparison, an uninjected debug-copy probe must match selected-library logit bits. Missing dumps, missing source, and source/build mismatches fail closed.
 
+Mt tier-3 calibration follows the candidate's `gate_contract.json` compiler flags and thread table. The default LM-14 contract still calibrates against `kernels/megakernel_mt/`. The accepted `--fmad=false`, 1024-thread M1 and 512-thread M2-5 contract calibrates against `kernels/megakernel_mt2/`. The same 213 positions, separate full/local envelopes, max-absolute/RMS metrics and `k=1.25` rule apply to both. Unknown contracts fail closed; candidates cannot nominate their own calibration library. Cache keys bind the accepted library, source, headers and compiler contract through the debug manifest. The per-contract measured envelopes live in `gate/cache/layers-calibration-*.json`.
+
+The mt debug builder supports the scalar-column prologue and the all-column `P2` prologue used by mt3. For the latter, it dumps each actual rounded half2 from attention staging and injects HF inputs through the existing all-column norm storage. It does not replace production attention or GEMM. Both hooks must reproduce selected-library logit bits before layer scoring. `bench/lm23/check_dump.py` also exercises the M1 all-column hook with dumping enabled and checks complete finite hidden/attention arrays.
+
 ## Validate the gate
 
 ```sh

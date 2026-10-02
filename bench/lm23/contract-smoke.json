@@ -1,0 +1,31 @@
+{
+  "tag": "measured",
+  "checks": [
+    {
+      "scenario": "default",
+      "passed": true,
+      "result": "/home/dell/Projects/latticemk/kernels/megakernel_mt/libmt4.so"
+    },
+    {
+      "scenario": "accepted",
+      "passed": true,
+      "result": "/home/dell/Projects/latticemk/kernels/megakernel_mt2/libmt4.so"
+    },
+    {
+      "scenario": "candidate_nomination_ignored",
+      "passed": true,
+      "result": "/home/dell/Projects/latticemk/kernels/megakernel_mt2/libmt4.so"
+    },
+    {
+      "scenario": "unknown_flags",
+      "passed": true,
+      "result": "rejected"
+    },
+    {
+      "scenario": "unknown_threads",
+      "passed": true,
+      "result": "rejected"
+    }
+  ],
+  "method": "Inline temporary gate_contract.json scenarios; trusted source selection only, no GPU or candidate calibration"
+}

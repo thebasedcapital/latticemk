@@ -1,0 +1,379 @@
+--- kernels/megakernel_mt2/mega_mt.cu
++++ kernels/megakernel_attn/mega_mt.cu
+@@ -24,6 +24,14 @@
+ #define MT 1
+ #endif
+ #define WARPS (THREADS / 32)
++#define ATTGROUP (MT > 1 ? 2 : 1)
++#define ATTROWS (MT > 1 ? MT : 1)
++#define ATTQUAL __forceinline__
++#if MT == 1
++#define CAUSALQUAL __forceinline__
++#else
++#define CAUSALQUAL __noinline__
++#endif
+ #define MAXIN 3072
+ #define NEG_INF (-1e30f)
+ #define RMS_EPS 1e-6f
+@@ -85,11 +93,12 @@
+ __shared__ __align__(16) __half xloc[MT][HID];  // private residual stream
+ __shared__ __align__(16) union {
+   uint4 sx4[MT][MAXIN / 8];    // transposed activation: 384 units = 6 KB
+-  float wpart[32][130]; // Keep v2's partition and accumulation order at 512 threads.
++  float wpart[ATTGROUP][32][130]; // Preserve all 32 virtual partitions per query.
+ } u;
+-__shared__ __align__(16) __half qhead[128];
+-__shared__ __align__(16) __half kvloc[256];  // k_pos | v_pos of the pos row
++__shared__ __align__(16) __half qhead[ATTROWS][128];
++__shared__ __align__(16) __half kvloc[ATTROWS][256];
+ __shared__ float red[WARPS];
++__shared__ float merge_weight[ATTGROUP][32], merge_max[ATTGROUP];
+ #include "profile_detail.cuh"
+ 
+ __device__ __forceinline__ float warp_sum(float v) {
+@@ -340,119 +349,205 @@
+   *reinterpret_cast<uint2*>(dst + lane * 4) = *reinterpret_cast<uint2*>(o);
+ }
+ 
+-// per-CTA attention: head = cta>>1, position half = cta&1; warp partials ->
+-// SMEM -> one global partial row per CTA in p.part[cta].
+-__device__ void attn2(const View& p, int layer, int pos, int cta) {
+-  const int lane = threadIdx.x & 31, warp = threadIdx.x >> 5;
+-  const int h = cta >> 1, kvh = h >> 1, half = cta & 1;
+-  const int npos = pos + 1;
+-  const int mid = (npos + 1) >> 1;         // half0: [0,mid), half1: [mid,npos)
+-  const int a0 = half ? mid : 0, a1 = half ? npos : mid;
+-
+-  // prologue: norm+rope this head's q; CTAs 0..7 append their kv head's
+-  // k (normed+roped) and v (raw) rows; half1 CTAs materialize the pos row
+-  // locally so nobody reads it from the caches this phase.
+-  if (warp == 0)
+-    norm_rope_row(p, layer, false, pos, p.qkv + h * 128, qhead);
+-  // appenders: CTA cta = 4*kvh covers kv head cta/4 (the first CTA of the
+-  // head pair for each of the 8 kv heads).
+-  const int appender = (cta % 4 == 0) ? cta / 4 : -1;
+-  if (MT == 1 && appender >= 0 && warp == 8)
+-    norm_rope_row(p, layer, true, pos, p.qkv + QROWS + appender * 128,
+-                  p.kc + ((int64_t)layer * p.cap + pos) * KVROWS +
+-                      appender * 128);
+-  if (MT == 1 && appender >= 0 && warp == 9) {
+-    const int lane8 = lane * 8;
+-    if (lane8 < 128)
+-      *reinterpret_cast<uint4*>(
+-          p.vc + ((int64_t)layer * p.cap + pos) * KVROWS + appender * 128 +
+-          lane8) =
+-          *reinterpret_cast<const uint4*>(p.qkv + QROWS + KVROWS +
+-                                          appender * 128 + lane8);
+-  }
+-  // the pair-half whose range contains pos builds that row locally
+-  const int cov = pos >= mid;
+-  if (half == cov && warp == 1)
+-    norm_rope_row(p, layer, true, pos, p.qkv + QROWS + kvh * 128, kvloc);
+-  if (half == cov && warp == 2) {
+-    const int lane8 = lane * 8;
+-    if (lane8 < 128)
+-      *reinterpret_cast<uint4*>(kvloc + 128 + lane8) =
+-          *reinterpret_cast<const uint4*>(p.qkv + QROWS + KVROWS + kvh * 128 +
+-                                          lane8);
+-  }
+-  __syncthreads();
+-  dt_trace(13);
+-
+-  // Physical warps process the same 32 virtual partitions as batch-1 v2.
+-  const int len = a1 - a0;
+-  const int per = (len + 31) / 32;
+-  for (int vw = warp; vw < 32; vw += WARPS) {
+-  float* po = u.wpart[vw];
+-  const int w0 = a0 + vw * per, w1 = min(a1, w0 + per);
+-  const __half* kc = p.kc + (int64_t)layer * p.cap * KVROWS;
+-  const __half* vc = p.vc + (int64_t)layer * p.cap * KVROWS;
+-  const uint2 uq = *reinterpret_cast<const uint2*>(qhead + lane * 4);
+-  const __half2 qr0 = as_h2(uq.x), qr1 = as_h2(uq.y);
+-  float m = NEG_INF, l = 0.f, acc[4] = {0.f, 0.f, 0.f, 0.f};
+-  for (int t = w0; t < w1; ++t) {
+-    const __half* krow =
+-        t == pos ? kvloc : kc + (int64_t)t * KVROWS + kvh * 128;
+-    uint2 uk = *reinterpret_cast<const uint2*>(krow + lane * 4);
+-    __half2 prod = __hmul2(as_h2(uk.x), qr0);
+-    prod = __hfma2(as_h2(uk.y), qr1, prod);
+-    float s = __low2float(prod) + __high2float(prod);
+-    s = warp_sum(s) * 0.08838834764831845f;
+-    const float mn = fmaxf(m, s);
+-    const float corr = m == NEG_INF ? 0.f : __expf(m - mn);
+-    const float e = __expf(s - mn);
+-    const __half* vrow =
+-        t == pos ? kvloc + 128 : vc + (int64_t)t * KVROWS + kvh * 128;
+-    uint2 uv = *reinterpret_cast<const uint2*>(vrow + lane * 4);
+-    float2 v0 = __half22float2(as_h2(uv.x)), v1 = __half22float2(as_h2(uv.y));
+-    acc[0] = acc[0] * corr + e * v0.x;
+-    acc[1] = acc[1] * corr + e * v0.y;
+-    acc[2] = acc[2] * corr + e * v1.x;
+-    acc[3] = acc[3] * corr + e * v1.y;
+-    l = l * corr + e;
+-    m = mn;
+-  }
+-#pragma unroll
+-  for (int j = 0; j < 4; ++j) po[lane * 4 + j] = acc[j];
+-  if (lane == 0) { po[128] = l; po[129] = m; }
+-  }
+-  __syncthreads();
+-  dt_trace(5);
+-
+-  // merge 32 warp partials -> one global partial per CTA (tid<130 covers
+-  // 128 acc elems + l + m).
+-  if (threadIdx.x < 130) {
+-    const int e = threadIdx.x;
++// One group keeps the inherited 32 warp partials and merge order.
++__device__ void attn_merge_weights(int group, int tid) {
++  if (tid < 32) {
+     float M = NEG_INF;
+-    if (e < 130) {
+ #pragma unroll 4
+-      for (int w = 0; w < 32; ++w) M = fmaxf(M, u.wpart[w][129]);
+-    }
++    for (int w = 0; w < 32; ++w) M = fmaxf(M, u.wpart[group][w][129]);
++    const float mw = u.wpart[group][tid][129];
++    merge_weight[group][tid] = mw > NEG_INF ? __expf(mw - M) : 0.f;
++    if (tid == 0) merge_max[group] = M;
++  }
++}
++
++__device__ void attn_merge(const View& p, int item, int group, int tid, int stride) {
++  for (int e = tid; e < 130; e += stride) {
++    const float M = merge_max[group];
+     if (M == NEG_INF) {
+-      if (e < 128) p.part[cta * 130 + e] = 0.f;
+-      else p.part[cta * 130 + e] = e == 128 ? 0.f : NEG_INF;
+-    } else if (e < 128) {
++      p.part[item * 130 + e] = e == 129 ? NEG_INF : 0.f;
++    } else if (e <= 128) {
+       float s = 0.f;
+       for (int w = 0; w < 32; ++w) {
+-        const float mw = u.wpart[w][129];
+-        if (mw > NEG_INF) s += __expf(mw - M) * u.wpart[w][e];
++        const float mw = u.wpart[group][w][129];
++        if (mw > NEG_INF) s += merge_weight[group][w] * u.wpart[group][w][e];
+       }
+-      p.part[cta * 130 + e] = s;
+-    } else if (e == 128) {
+-      float s = 0.f;
+-      for (int w = 0; w < 32; ++w) {
+-        const float mw = u.wpart[w][129];
+-        if (mw > NEG_INF) s += __expf(mw - M) * u.wpart[w][128];
++      p.part[item * 130 + e] = s;
++      if (e == 128) p.part[item * 130 + 129] = M;
++    }
++  }
++}
++
++// Materialize new rows locally, so no query reads another CTA's append.
++// Exactly one head-half CTA writes each cache row.
++__device__ void attn_setup(const View& p, int layer, int pos, int item,
++                          int slot, int warp) {
++  const int h = item >> 1, kvh = h >> 1, lane = threadIdx.x & 31;
++  if (warp == 0)
++    norm_rope_row(p, layer, false, pos, p.qkv + h * 128, qhead[slot]);
++  if (warp == 1)
++    norm_rope_row(p, layer, true, pos, p.qkv + QROWS + kvh * 128, kvloc[slot]);
++  if (warp == 2 && lane < 16)
++    *reinterpret_cast<uint4*>(kvloc[slot] + 128 + lane * 8) =
++        *reinterpret_cast<const uint4*>(p.qkv + QROWS + KVROWS + kvh * 128 + lane * 8);
++}
++
++__device__ void attn_append_local(const View& p, int layer, int pos, int item,
++                                 int slot, int warp) {
++  const int lane = threadIdx.x & 31, kvh = item >> 2;
++  if (item % 4 == 0 && warp == 1)
++    *reinterpret_cast<uint2*>(p.kc + ((int64_t)layer * p.cap + pos) * KVROWS +
++                             kvh * 128 + lane * 4) =
++        *reinterpret_cast<const uint2*>(kvloc[slot] + lane * 4);
++  if (item % 4 == 0 && warp == 2 && lane < 16)
++    *reinterpret_cast<uint4*>(p.vc + ((int64_t)layer * p.cap + pos) * KVROWS +
++                             kvh * 128 + lane * 8) =
++        *reinterpret_cast<const uint4*>(kvloc[slot] + 128 + lane * 8);
++}
++
++// Batch work items are (sequence, query head, position half). Two independent
++// groups run concurrently in each CTA, including the four formerly idle CTAs.
++__device__ ATTQUAL void attn_batch(const P2& p, int layer, int cta) {
++  const int group_threads = THREADS / ATTGROUP;
++  const int group = threadIdx.x / group_threads;
++  const int tid = threadIdx.x % group_threads, lane = tid & 31, warp = tid >> 5;
++  for (int base = cta * ATTGROUP; base < MT * NATTN; base += NCTA * ATTGROUP) {
++    const int job = base + group, col = job / NATTN, item = job % NATTN;
++    const bool active = job < MT * NATTN;
++    const View v = column(p, active ? col : 0);
++    const int pos = position(p, active ? col : 0);
++    if (active) attn_setup(v, layer, pos, item, group, warp);
++    __syncthreads(); dt_trace(13);
++    if (active) {
++      attn_append_local(v, layer, pos, item, group, warp);
++      const int kvh = item >> 2, mid = (pos + 2) >> 1;
++      const int a0 = (item & 1) ? mid : 0, a1 = (item & 1) ? pos + 1 : mid;
++      const int per = (a1 - a0 + 31) / 32;
++      const uint2 uq = *reinterpret_cast<const uint2*>(qhead[group] + lane * 4);
++      const __half2 qr0 = as_h2(uq.x), qr1 = as_h2(uq.y);
++      for (int vw = warp; vw < 32; vw += group_threads / 32) {
++        const int w0 = a0 + vw * per, w1 = min(a1, w0 + per);
++        float m = NEG_INF, l = 0.f, acc[4] = {0.f, 0.f, 0.f, 0.f};
++        for (int t = w0; t < w1; ++t) {
++          const __half* krow = t == pos ? kvloc[group] :
++              v.kc + ((int64_t)layer * v.cap + t) * KVROWS + kvh * 128;
++          const uint2 uk = *reinterpret_cast<const uint2*>(krow + lane * 4);
++          __half2 prod = __hmul2(as_h2(uk.x), qr0);
++          prod = __hfma2(as_h2(uk.y), qr1, prod);
++          const float s = warp_sum(__low2float(prod) + __high2float(prod)) * 0.08838834764831845f;
++          const float mn = fmaxf(m, s), corr = m == NEG_INF ? 0.f : __expf(m - mn);
++          const float e = __expf(s - mn);
++          const __half* vrow = t == pos ? kvloc[group] + 128 :
++              v.vc + ((int64_t)layer * v.cap + t) * KVROWS + kvh * 128;
++          const uint2 uv = *reinterpret_cast<const uint2*>(vrow + lane * 4);
++          const float2 v0 = __half22float2(as_h2(uv.x)), v1 = __half22float2(as_h2(uv.y));
++          acc[0] = acc[0] * corr + e * v0.x; acc[1] = acc[1] * corr + e * v0.y;
++          acc[2] = acc[2] * corr + e * v1.x; acc[3] = acc[3] * corr + e * v1.y;
++          l = l * corr + e; m = mn;
++        }
++#pragma unroll
++        for (int j = 0; j < 4; ++j) u.wpart[group][vw][lane * 4 + j] = acc[j];
++        if (lane == 0) { u.wpart[group][vw][128] = l; u.wpart[group][vw][129] = m; }
+       }
+-      p.part[cta * 130 + 128] = s;
+-      p.part[cta * 130 + 129] = M;
+-    }
+-  }
++    }
++    __syncthreads(); dt_trace(5);
++    if (active) attn_merge_weights(group, tid);
++    __syncthreads();
++    if (active) attn_merge(v, item, group, tid, group_threads);
++    __syncthreads(); dt_trace(14);
++  }
++}
++
++// Each physical warp tiles one inherited virtual partition in registers.
++// Its row is reused by all M queries with matching causal partition ranges.
++// Unlike contiguous CTA tiles, every warp retains independent forward work.
++__device__ CAUSALQUAL void attn_causal(const P2& p, int layer, int cta) {
++  if (cta >= NATTN) return;
++  const int lane = threadIdx.x & 31, warp = threadIdx.x >> 5;
++  const int kvh = cta >> 2, start = position(p, 0);
++  for (int col = 0; col < MT; ++col)
++    attn_setup(column(p, col), layer, start + col, cta, col, warp);
++  __syncthreads(); dt_trace(13);
++  for (int col = 0; col < MT; ++col)
++    attn_append_local(column(p, col), layer, start + col, cta, col, warp);
++  float state[32 / WARPS][MT][6];
++  uint2 qr[MT];
++#pragma unroll
++  for (int col = 0; col < MT; ++col)
++    qr[col] = *reinterpret_cast<const uint2*>(qhead[col] + lane * 4);
++#pragma unroll
++  for (int wave = 0; wave < 32 / WARPS; ++wave) {
++    const int vw = warp + wave * WARPS;
++    int lo[MT], hi[MT], t0 = MAXPOS, t1 = 0;
++#pragma unroll
++    for (int col = 0; col < MT; ++col) {
++      const int pos = start + col, mid = (pos + 2) >> 1;
++      const int a0 = (cta & 1) ? mid : 0, a1 = (cta & 1) ? pos + 1 : mid;
++      const int per = (a1 - a0 + 31) / 32;
++      lo[col] = a0 + vw * per; hi[col] = min(a1, lo[col] + per);
++      t0 = min(t0, lo[col]); t1 = max(t1, hi[col]);
++#pragma unroll
++      for (int j = 0; j < 6; ++j) state[wave][col][j] = j == 5 ? NEG_INF : 0.f;
++    }
++    const View v = column(p, 0);
++    for (int t = t0; t < t1; ++t) {
++      bool used = false;
++      int next = t1;
++#pragma unroll
++      for (int col = 0; col < MT; ++col) {
++        used |= t >= lo[col] && t < hi[col];
++        if (lo[col] > t && lo[col] < hi[col]) next = min(next, lo[col]);
++      }
++      if (!used) { t = next - 1; continue; }
++      const __half* krow = t >= start ? kvloc[t - start] :
++          v.kc + ((int64_t)layer * v.cap + t) * KVROWS + kvh * 128;
++      const __half* vrow = t >= start ? kvloc[t - start] + 128 :
++          v.vc + ((int64_t)layer * v.cap + t) * KVROWS + kvh * 128;
++      const uint2 uk = *reinterpret_cast<const uint2*>(krow + lane * 4);
++      const uint2 uv = *reinterpret_cast<const uint2*>(vrow + lane * 4);
++      const float2 v0 = __half22float2(as_h2(uv.x)), v1 = __half22float2(as_h2(uv.y));
++#pragma unroll
++      for (int col = 0; col < MT; ++col) if (t >= lo[col] && t < hi[col]) {
++        __half2 prod = __hmul2(as_h2(uk.x), as_h2(qr[col].x));
++        prod = __hfma2(as_h2(uk.y), as_h2(qr[col].y), prod);
++        const float s = warp_sum(__low2float(prod) + __high2float(prod)) * 0.08838834764831845f;
++        float* a = state[wave][col];
++        const float mn = fmaxf(a[5], s), corr = a[5] == NEG_INF ? 0.f : __expf(a[5] - mn);
++        const float e = __expf(s - mn);
++        a[0] = a[0] * corr + e * v0.x; a[1] = a[1] * corr + e * v0.y;
++        a[2] = a[2] * corr + e * v1.x; a[3] = a[3] * corr + e * v1.y;
++        a[4] = a[4] * corr + e; a[5] = mn;
++      }
++    }
++  }
++  dt_trace(5);
++  // Merge two query columns concurrently through the two partial groups.
++  const int group_threads = THREADS / ATTGROUP;
++  const int group = threadIdx.x / group_threads, tid = threadIdx.x % group_threads;
++#pragma unroll
++  for (int base = 0; base < MT; base += ATTGROUP) {
++#pragma unroll
++    for (int g = 0; g < ATTGROUP; ++g) if (base + g < MT) {
++#pragma unroll
++      for (int wave = 0; wave < 32 / WARPS; ++wave) {
++        const int vw = warp + wave * WARPS;
++#pragma unroll
++        for (int j = 0; j < 4; ++j) u.wpart[g][vw][lane * 4 + j] = state[wave][base + g][j];
++        if (lane == 0) { u.wpart[g][vw][128] = state[wave][base + g][4]; u.wpart[g][vw][129] = state[wave][base + g][5]; }
++      }
++    }
++    __syncthreads();
++    if (base + group < MT) attn_merge_weights(group, tid);
++    __syncthreads();
++    if (base + group < MT) attn_merge(column(p, base + group), cta, group, tid, group_threads);
++    __syncthreads();
++  }
++  dt_trace(14);
++}
++
++__device__ void attn2(const P2& p, int layer, int cta) {
++  if (p.mode) attn_batch(p, layer, cta);
++  else attn_causal(p, layer, cta);
+ }
+ 
+ // ============================ argmax =========================================
+@@ -522,16 +617,6 @@
+ }
+ 
+ 
+-__device__ void append(const View& p,int l,int pos,int cta) {
+-  const int warp=threadIdx.x>>5,lane=threadIdx.x&31;
+-  const int h=cta/4;
+-  if(cta>=NATTN || cta%4) return;
+-  if(warp==8) norm_rope_row(p,l,true,pos,p.qkv+QROWS+h*128,
+-                           p.kc+((int64_t)l*p.cap+pos)*KVROWS+h*128);
+-  if(warp==9 && lane<16)
+-    *reinterpret_cast<uint4*>(p.vc+((int64_t)l*p.cap+pos)*KVROWS+h*128+lane*8)=
+-      *reinterpret_cast<const uint4*>(p.qkv+QROWS+KVROWS+h*128+lane*8);
+-}
+ #include "mega_detail.cuh"
+ #ifdef PROFILE
+ __shared__ unsigned long long cycles[7],stamp;
+@@ -554,15 +639,7 @@
+     TRACE(6);
+     gemv_run(p.w[l*4],cta);gbar(p.bar,expect);
+     TRACE(0);
+-#if MT > 1
+-    for(int m=0;m<MT;++m) append(column(p,m),l,position(p,m),cta);
+-    gbar(p.bar,expect);
+-    TRACE(6);
+-#endif
+-    for(int m=0;m<MT;++m) {
+-      if(cta<NATTN) attn2(column(p,m),l,position(p,m),cta);
+-      __syncthreads();
+-    }
++    attn2(p,l,cta);
+     gbar(p.bar,expect);
+     TRACE(5);
+     for(int m=0;m<MT;++m) pro_attnc(column(p,m),m);

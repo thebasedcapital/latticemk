@@ -1,0 +1,13 @@
+--- /home/dell/Projects/latticemk/kernels/megakernel_mt2/mega_mt.cu	2026-10-02 06:07:03.305062520 -0400
++++ /home/dell/Projects/latticemk/kernels/megakernel_mma/mega_mt.cu	2026-10-02 07:00:14.667638777 -0400
+@@ -130,7 +130,9 @@
+ // conflict-free LDS.128 (natural order would be a 4-way conflict).
+ 
+ 
+-#ifdef ORIGINAL
++#if defined(MMA)
++#include "gemm_mma.cuh"
++#elif defined(ORIGINAL)
+ #include "gemm_original.cuh"
+ #elif defined(NONVOLATILE)
+ #include "gemm_nv.cuh"

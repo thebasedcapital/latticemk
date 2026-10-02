@@ -18,6 +18,8 @@ def build(library, m, kind='jitter'):
         raise ValueError(kind)
     from debug import resolve_source as selected_source
     source, defines = selected_source('mt', library)
+    import contract
+    built = contract.load(library)
     text = source.read_text()
     # Uniform block barriers remain uniform. Vary arrival times by CTA, warp, site.
     site = 0
@@ -35,7 +37,7 @@ def build(library, m, kind='jitter'):
         return content
     text = instrument(text)
     headers = {p.name: instrument(p.read_text()).encode() for p in source.parent.glob('*.cuh')}
-    digest = hashlib.sha256(text.encode() + b''.join(headers[k] for k in sorted(headers)) + repr((m, defines)).encode()).hexdigest()[:16]
+    digest = hashlib.sha256(text.encode() + b''.join(headers[k] for k in sorted(headers)) + repr((m, defines, built['nvcc_flags'], built['threads'])).encode()).hexdigest()[:16]
     folder = ROOT / 'gate/build' / f'mt-jitter-m{m}-{digest}'
     folder.mkdir(parents=True, exist_ok=True)
     output = folder / 'jitter.so'
@@ -44,7 +46,7 @@ def build(library, m, kind='jitter'):
         for name, content in headers.items():
             (folder / name).write_bytes(content)
         cuda = Path.home() / '.local/cuda-13.3'
-        command = [str(cuda / 'bin/nvcc'), '-O3', '-arch=sm_75', '-std=c++17', '-allow-unsupported-compiler', '-L'+str(cuda/'lib'), '-Xcompiler', '-fPIC', '-shared', '-cudart', 'static', f'-DMT={m}', f'-DTHREADS={512 if m == 5 else 1024}', *['-D'+d for d in defines], '-o', str(output), str(folder/'mega_mt.cu')]
+        command = [str(cuda / 'bin/nvcc'), '-O3', '-arch=sm_75', '-std=c++17', '-allow-unsupported-compiler', '-L'+str(cuda/'lib'), '-Xcompiler', '-fPIC', '-shared', '-cudart', 'static', *built['nvcc_flags'], f'-DMT={m}', f'-DTHREADS={contract.threads(built, m)}', *['-D'+d for d in defines], '-o', str(output), str(folder/'mega_mt.cu')]
         result = subprocess.run(command, capture_output=True, text=True, timeout=120)
         (folder/'build.log').write_text(result.stdout + result.stderr)
         if result.returncode:

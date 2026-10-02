@@ -158,11 +158,13 @@ def run(library=None,tier=2,baseline=None,m=1,mode='causal'):
             base.set_tok(int(case['prompt'][-1]) if s==0 else int(case['forced'][s-1]));base.mega();lines.append(base.logits().cpu())
         base_error=max(base_error,float((torch.stack(lines)-case['reference']).abs().max()))
     del base;release()
-    sequential,_,_=execute(ROOT/'kernels/megakernel_mt/libmt1.so',1,'causal',data,cases,seeds,256)
+    import contract
+    built=contract.load(library)
+    sequential,_,_=execute(Path(built['seq_lib']),1,'causal',data,cases,seeds,256)
     first,indices,_=execute(library,m,mode,data,cases,seeds,256)
     second,_,_=execute(library,m,mode,data,cases,seeds,256)
     result=metrics(first,indices,cases,min(.5,1.25*base_error),prior=second,sequential=sequential)
-    result.update(baseline_v2_diff=base_error,mode=mode,m=m,wall_s=time.perf_counter()-started,script='gate/mt_gate.py:run tier1; unchanged bench/lm14/check_gate.py criteria')
+    result.update(baseline_v2_diff=base_error,mode=mode,m=m,wall_s=time.perf_counter()-started,contract=built,script='gate/mt_gate.py:run tier1; unchanged bench/lm14/check_gate.py criteria')
     regression={'requested':bool(baseline),'pass':None,'coverage':'base and context/adversarial cases','wall_s':0.}
     if baseline:
         regression_stamp=time.perf_counter()
