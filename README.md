@@ -7,7 +7,7 @@ compression lever is worth building: a fused batch-1 GEMV, lattice-coded vs INT4
 Hardware (`hw/hw.json`, read from the device): **Quadro RTX 4000, Turing sm_75**, 36 SMs, 64 KB SMEM/SM, 4 MB L2,
 416 GB/s spec, **406.7 GB/s measured read roofline** (copy 358–361 GB/s). Clocks cannot be locked without root.
 Not Ada: Ada-MK targets Ada (100 KB SMEM) and MPK is evaluated on A100/H100/B200, so neither is a drop-in baseline
-on this card. Phase reports against the agent build spec: `reports/wave-1.md` … `reports/wave-4.md`.
+on this card. Phase reports against the agent build spec: `reports/wave-1.md` … `reports/wave-6.md`.
 
 ## Results
 

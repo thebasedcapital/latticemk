@@ -1,0 +1,6 @@
+ptxas info    : 0 bytes gmem
+ptxas info    : Compiling entry function '_Z7mega_mtPK2P2' for 'sm_75'
+ptxas info    : Function properties for _Z7mega_mtPK2P2
+    48 bytes stack frame, 156 bytes spill stores, 232 bytes spill loads
+ptxas info    : Used 64 registers, used 1 barriers, 48 bytes cumulative stack size, 34176 bytes smem, 360 bytes cmem[0], 16 bytes cmem[2]
+ptxas info    : Compile time = 3344.694 ms

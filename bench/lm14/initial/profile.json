@@ -1,0 +1,166 @@
+[
+  {
+    "mode": "causal",
+    "m": 1,
+    "context": 128,
+    "weight_cycles": 1697906.0,
+    "attention_cycles": 301699.0,
+    "other_cycles": 458094.0,
+    "fractions": [
+      0.6908518903250561,
+      0.1227566923370193,
+      0.1863914173379246
+    ],
+    "samples_cycles": [
+      [
+        1704491,
+        301397,
+        455822
+      ],
+      [
+        1687951,
+        315803,
+        470184
+      ],
+      [
+        1700040,
+        301699,
+        458094
+      ],
+      [
+        1694172,
+        315499,
+        467746
+      ],
+      [
+        1697906,
+        299283,
+        456554
+      ]
+    ],
+    "method": "CTA0 thread0 clock64; GEMM and attention include their ending grid barrier; other includes prologues, append barriers and argmax"
+  },
+  {
+    "mode": "causal",
+    "m": 4,
+    "context": 128,
+    "weight_cycles": 4427887.0,
+    "attention_cycles": 1156193.0,
+    "other_cycles": 1646227.0,
+    "fractions": [
+      0.6124064994750569,
+      0.1599092541990264,
+      0.22768424632591672
+    ],
+    "samples_cycles": [
+      [
+        4388851,
+        1156193,
+        1647714
+      ],
+      [
+        4415290,
+        1147059,
+        1652987
+      ],
+      [
+        4427908,
+        1164632,
+        1643656
+      ],
+      [
+        4442211,
+        1156690,
+        1640565
+      ],
+      [
+        4427887,
+        1154972,
+        1646227
+      ]
+    ],
+    "method": "CTA0 thread0 clock64; GEMM and attention include their ending grid barrier; other includes prologues, append barriers and argmax"
+  },
+  {
+    "mode": "batch",
+    "m": 1,
+    "context": 128,
+    "weight_cycles": 1688831.0,
+    "attention_cycles": 301636.0,
+    "other_cycles": 466032.0,
+    "fractions": [
+      0.6874950895563157,
+      0.12279101273804711,
+      0.18971389770563718
+    ],
+    "samples_cycles": [
+      [
+        1686779,
+        309585,
+        471269
+      ],
+      [
+        1683340,
+        300930,
+        466032
+      ],
+      [
+        1700501,
+        303475,
+        467793
+      ],
+      [
+        1688831,
+        301636,
+        465555
+      ],
+      [
+        1702111,
+        300533,
+        461434
+      ]
+    ],
+    "method": "CTA0 thread0 clock64; GEMM and attention include their ending grid barrier; other includes prologues, append barriers and argmax"
+  },
+  {
+    "mode": "batch",
+    "m": 4,
+    "context": 128,
+    "weight_cycles": 4383525.0,
+    "attention_cycles": 1206396.0,
+    "other_cycles": 1643079.0,
+    "fractions": [
+      0.606045209456657,
+      0.1667905433430112,
+      0.22716424720033182
+    ],
+    "samples_cycles": [
+      [
+        4383525,
+        1206396,
+        1643079
+      ],
+      [
+        4382258,
+        1206428,
+        1644742
+      ],
+      [
+        4872306,
+        1206991,
+        1642355
+      ],
+      [
+        4397965,
+        1203665,
+        1633553
+      ],
+      [
+        4381800,
+        1205522,
+        1647557
+      ]
+    ],
+    "method": "CTA0 thread0 clock64; GEMM and attention include their ending grid barrier; other includes prologues, append barriers and argmax"
+  }
+]

@@ -1,0 +1,144 @@
+{
+  "model": "0.6B",
+  "bound": 0.2898859977722168,
+  "control_diff": 0.23190879821777344,
+  "hf_wall_s": 12.195337192039005,
+  "control_kl": 2.0678825467648036e-05,
+  "original_kl": 2.127474943860976e-05,
+  "kl_bound": 2.5848531834560045e-05,
+  "original_gate": {
+    "stages": {
+      "determinism": {
+        "status": "PASS",
+        "wall_s": 1.250070723996032
+      },
+      "logit_bound": {
+        "status": "PASS",
+        "wall_s": 1.1990712939877994,
+        "bound": 0.2898859977722168
+      },
+      "argmax": {
+        "status": "PASS",
+        "wall_s": 0.0,
+        "events": [
+          {
+            "case": "prompt-0",
+            "step": 5,
+            "margin": 0.023174285888671875,
+            "diff": 0.07291984558105469,
+            "kind": "near"
+          }
+        ]
+      },
+      "greedy": {
+        "status": "MISMATCH",
+        "wall_s": 0.47114778199465945,
+        "matches": 144,
+        "total": 192,
+        "binding": false
+      },
+      "sampling": {
+        "status": "PASS",
+        "wall_s": 0.0,
+        "errors": [],
+        "count": 0
+      },
+      "context": {
+        "status": "PASS",
+        "wall_s": 2.94876945001306,
+        "max_diff": 0.12848329544067383,
+        "steps": 20
+      },
+      "adversarial": {
+        "status": "PASS",
+        "wall_s": 0.3163191750063561,
+        "max_diff": 0.12344980239868164,
+        "steps": 32
+      },
+      "head_perm": {
+        "status": "PASS",
+        "wall_s": 3.651733100938145,
+        "max_diff": 0.21141767501831055,
+        "variants": 3
+      },
+      "multistep": {
+        "status": "PASS",
+        "wall_s": 0.10236093500861898,
+        "pass": true,
+        "tokens_equal": true,
+        "logits_equal": true
+      },
+      "repeat": {
+        "status": "PASS",
+        "wall_s": 2.954546688008122
+      },
+      "jitter": {
+        "status": "PASS",
+        "wall_s": 3.241051683027763
+      },
+      "distribution": {
+        "status": "PASS",
+        "wall_s": 0.0,
+        "mean_kl": 2.127474943860976e-05,
+        "limit": 2.5848531834560045e-05
+      }
+    },
+    "max_diff": 0.21141767501831055,
+    "teacher_steps": 192,
+    "gpu_stage": "SURVIVED",
+    "extra_stage": "SURVIVED",
+    "extra_fails": [],
+    "equivalent": true,
+    "mean_kl": 2.127474943860976e-05,
+    "rms_diff": 0.020492215687913665,
+    "orig_max_diff": 0.0,
+    "equivalence_scope": "bitwise-identical logits on base + extra cases + sampler; not a global proof"
+  },
+  "prepare_wall_s": 47.410821021010634,
+  "original_first": {
+    "max_diff": 0.21141767501831055,
+    "nonfinite": false,
+    "events": [
+      {
+        "case": "prompt-0",
+        "step": 5,
+        "margin": 0.023174285888671875,
+        "diff": 0.07291984558105469,
+        "kind": "near"
+      }
+    ],
+    "bitwise_repeat": true,
+    "original_equal": true,
+    "sample_errors": [],
+    "steps": 192,
+    "kill": null,
+    "over_bound": false,
+    "mean_kl": 2.127474943860976e-05,
+    "rms_diff": 0.020492215687913665,
+    "orig_max_diff": 0.0,
+    "wall_s": 1.0812235010089353
+  },
+  "original_repeat": {
+    "max_diff": 0.21141767501831055,
+    "nonfinite": false,
+    "events": [
+      {
+        "case": "prompt-0",
+        "step": 5,
+        "margin": 0.023174285888671875,
+        "diff": 0.07291984558105469,
+        "kind": "near"
+      }
+    ],
+    "bitwise_repeat": true,
+    "original_equal": true,
+    "sample_errors": [],
+    "steps": 192,
+    "kill": null,
+    "over_bound": false,
+    "mean_kl": 2.127474943860976e-05,
+    "rms_diff": 0.020492215687913665,
+    "orig_max_diff": 0.0,
+    "wall_s": 1.0872654180275276
+  }
+}

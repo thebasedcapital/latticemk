@@ -1,0 +1,212 @@
+[
+  {
+    "mode": "causal",
+    "m": 1,
+    "max_diff_hf": 0.1302332878112793,
+    "per_sequence_diff": [
+      0.07436656951904297,
+      0.1302332878112793,
+      0.061971187591552734
+    ],
+    "baseline_v2_diff": 0.21141767501831055,
+    "max_diff_sequential": 0.0,
+    "sequential_tolerance": 0.1,
+    "bitwise_repeat": true,
+    "nonfinite": 0,
+    "near_ties": [],
+    "hard_flips": [],
+    "pass_gate": true
+  },
+  {
+    "mode": "causal",
+    "m": 2,
+    "max_diff_hf": 0.1302332878112793,
+    "per_sequence_diff": [
+      0.07436656951904297,
+      0.1302332878112793,
+      0.061971187591552734
+    ],
+    "baseline_v2_diff": 0.21141767501831055,
+    "max_diff_sequential": 0.0,
+    "sequential_tolerance": 0.1,
+    "bitwise_repeat": true,
+    "nonfinite": 0,
+    "near_ties": [],
+    "hard_flips": [],
+    "pass_gate": true
+  },
+  {
+    "mode": "causal",
+    "m": 3,
+    "max_diff_hf": 0.1302332878112793,
+    "per_sequence_diff": [
+      0.07436656951904297,
+      0.1302332878112793,
+      0.061971187591552734
+    ],
+    "baseline_v2_diff": 0.21141767501831055,
+    "max_diff_sequential": 0.0,
+    "sequential_tolerance": 0.1,
+    "bitwise_repeat": true,
+    "nonfinite": 0,
+    "near_ties": [],
+    "hard_flips": [],
+    "pass_gate": true
+  },
+  {
+    "mode": "causal",
+    "m": 4,
+    "max_diff_hf": 0.1302332878112793,
+    "per_sequence_diff": [
+      0.07436656951904297,
+      0.1302332878112793,
+      0.061971187591552734
+    ],
+    "baseline_v2_diff": 0.21141767501831055,
+    "max_diff_sequential": 0.0,
+    "sequential_tolerance": 0.1,
+    "bitwise_repeat": true,
+    "nonfinite": 0,
+    "near_ties": [],
+    "hard_flips": [],
+    "pass_gate": true
+  },
+  {
+    "mode": "causal",
+    "m": 5,
+    "max_diff_hf": 0.1302332878112793,
+    "per_sequence_diff": [
+      0.07436656951904297,
+      0.1302332878112793,
+      0.061971187591552734
+    ],
+    "baseline_v2_diff": 0.21141767501831055,
+    "max_diff_sequential": 0.0,
+    "sequential_tolerance": 0.1,
+    "bitwise_repeat": true,
+    "nonfinite": 0,
+    "near_ties": [],
+    "hard_flips": [],
+    "pass_gate": true
+  },
+  {
+    "mode": "batch",
+    "m": 1,
+    "max_diff_hf": 0.1302332878112793,
+    "per_sequence_diff": [
+      0.07436656951904297,
+      0.1302332878112793,
+      0.061971187591552734
+    ],
+    "baseline_v2_diff": 0.21141767501831055,
+    "max_diff_sequential": 0.0,
+    "sequential_tolerance": 0.1,
+    "bitwise_repeat": true,
+    "nonfinite": 0,
+    "near_ties": [],
+    "hard_flips": [],
+    "pass_gate": true
+  },
+  {
+    "mode": "batch",
+    "m": 2,
+    "max_diff_hf": 0.1302332878112793,
+    "per_sequence_diff": [
+      0.07436656951904297,
+      0.1302332878112793,
+      0.1302332878112793,
+      0.061971187591552734,
+      0.061971187591552734,
+      0.07436656951904297
+    ],
+    "baseline_v2_diff": 0.21141767501831055,
+    "max_diff_sequential": 0.0,
+    "sequential_tolerance": 0.1,
+    "bitwise_repeat": true,
+    "nonfinite": 0,
+    "near_ties": [],
+    "hard_flips": [],
+    "pass_gate": true
+  },
+  {
+    "mode": "batch",
+    "m": 3,
+    "max_diff_hf": 0.1302332878112793,
+    "per_sequence_diff": [
+      0.07436656951904297,
+      0.1302332878112793,
+      0.061971187591552734,
+      0.1302332878112793,
+      0.061971187591552734,
+      0.07436656951904297,
+      0.061971187591552734,
+      0.07436656951904297,
+      0.1302332878112793
+    ],
+    "baseline_v2_diff": 0.21141767501831055,
+    "max_diff_sequential": 0.0,
+    "sequential_tolerance": 0.1,
+    "bitwise_repeat": true,
+    "nonfinite": 0,
+    "near_ties": [],
+    "hard_flips": [],
+    "pass_gate": true
+  },
+  {
+    "mode": "batch",
+    "m": 4,
+    "max_diff_hf": 0.1302332878112793,
+    "per_sequence_diff": [
+      0.07436656951904297,
+      0.1302332878112793,
+      0.061971187591552734,
+      0.07436656951904297,
+      0.1302332878112793,
+      0.061971187591552734,
+      0.07436656951904297,
+      0.1302332878112793,
+      0.061971187591552734,
+      0.07436656951904297,
+      0.1302332878112793,
+      0.061971187591552734
+    ],
+    "baseline_v2_diff": 0.21141767501831055,
+    "max_diff_sequential": 0.0,
+    "sequential_tolerance": 0.1,
+    "bitwise_repeat": true,
+    "nonfinite": 0,
+    "near_ties": [],
+    "hard_flips": [],
+    "pass_gate": true
+  },
+  {
+    "mode": "batch",
+    "m": 5,
+    "max_diff_hf": 0.1302332878112793,
+    "per_sequence_diff": [
+      0.07436656951904297,
+      0.1302332878112793,
+      0.061971187591552734,
+      0.07436656951904297,
+      0.1302332878112793,
+      0.1302332878112793,
+      0.061971187591552734,
+      0.07436656951904297,
+      0.1302332878112793,
+      0.061971187591552734,
+      0.061971187591552734,
+      0.07436656951904297,
+      0.1302332878112793,
+      0.061971187591552734,
+      0.07436656951904297
+    ],
+    "baseline_v2_diff": 0.21141767501831055,
+    "max_diff_sequential": 0.0,
+    "sequential_tolerance": 0.1,
+    "bitwise_repeat": true,
+    "nonfinite": 0,
+    "near_ties": [],
+    "hard_flips": [],
+    "pass_gate": true
+  }
+]

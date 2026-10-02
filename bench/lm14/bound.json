@@ -1,0 +1,30 @@
+{
+  "assumed_weights": 600000000,
+  "sms": 36,
+  "assumed_sm_clock_ghz": 1.8,
+  "weights_per_sm": 16666666.666666666,
+  "half2_pairs_per_sm": 8333333.333333333,
+  "lds_cycles_m4": 1041666.6666666666,
+  "lds_ms": {
+    "1": 0.14467592592592593,
+    "4": 0.5787037037037037
+  },
+  "hfma2_cycles_m4": 520833.3333333333,
+  "hfma2_ms_m4": 0.28935185185185186,
+  "measured_weight_stream_m1_ms": 1.3634560108184814,
+  "assumed_compute_band_ms": [
+    0.6,
+    0.9
+  ],
+  "derived_expected_gemm_m4_band_ms": [
+    1.4,
+    1.6
+  ],
+  "derived_expected_ratio_band": [
+    1.1,
+    1.2
+  ],
+  "measured_gemm_m4_ms": 4.098112106323242,
+  "derived_gap_ms": 2.498112106323242,
+  "note": "Throughput arithmetic supplied by integrator. LDS32 assumes 32 pair loads per SM cycle; HFMA2 assumes 64 lane operations per SM cycle. Ignores dependency latency, instruction scheduling, reduction helpers, control flow, bank conflicts, and other resource interactions. Unexplained gap suggests latency; no stall counters were measured."
+}
