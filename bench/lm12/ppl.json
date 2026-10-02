@@ -1,0 +1,10 @@
+{
+  "protocol": "llama-perplexity -c 2048 -ngl 99 -b 2048 -ub 512 --no-warmup -fa on; 146 WikiText-2 test windows, second half scored",
+  "llama_commit": "6011c34c",
+  "ppl": {
+    "f16/f16": 8.4479,
+    "q4_0/f16": 9.714,
+    "q4_k_m/f16": 8.8768,
+    "int4gptq-fake/f16": 9.2371
+  }
+}

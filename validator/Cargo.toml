@@ -1,0 +1,20 @@
+[package]
+name = "validator"
+version = "0.1.0"
+edition = "2021"
+description = "LM-05: static validator for Schedule IR v1 (deadlock-free, race-free)"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[[bin]]
+name = "schedcheck"
+path = "src/bin/schedcheck.rs"
+
+[[bin]]
+name = "fuzz"
+path = "src/bin/fuzz.rs"
+
+[profile.release]
+opt-level = 3

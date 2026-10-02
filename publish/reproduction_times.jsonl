@@ -1,0 +1,8 @@
+{"stage":"gate","wall_seconds":81}
+{"stage":"validate","wall_seconds":0}
+{"stage":"bench","wall_seconds":83}
+{"stage":"ppl","wall_seconds":536}
+{"stage":"charts","wall_seconds":2}
+{"stage":"all","wall_seconds":716}
+{"stage":"validate","wall_seconds":0}
+{"stage":"validate","wall_seconds":0}

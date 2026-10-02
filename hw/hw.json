@@ -1,0 +1,12 @@
+{
+  "name": "Quadro RTX 4000", "compute_capability": "7.5", "sm_count": 36,
+  "smem_per_block_default": 49152, "smem_per_block_optin": 65536, "smem_per_sm": 65536,
+  "regs_per_sm": 65536, "regs_per_block": 65536, "max_threads_per_sm": 1024, "l2_bytes": 4194304,
+  "global_mem_bytes": 8149073920, "mem_bus_bits": 256, "mem_clock_khz": 6501000, "sm_clock_max_khz": 1545000,
+  "spec_bandwidth_gbps": 416.1, "driver_cuda_version": 13030, "runtime_cuda_version": 13030,
+  "buffer_bytes": 536870912,
+  "copy_bandwidth_gbps": {"median": 360.589, "p10": 358.761, "p90": 362.162, "spread_pct": 0.94, "unit": "GB/s (read+write bytes)", "runs": 20},
+  "read_bandwidth_gbps": {"median": 406.791, "p10": 406.484, "p90": 406.890, "spread_pct": 0.10, "unit": "GB/s", "runs": 20},
+  "launch_overhead_us": {"median": 1.673, "p10": 1.648, "p90": 1.729, "spread_pct": 4.81, "unit": "us per back-to-back empty launch", "runs": 20},
+  "graph_node_overhead_us": {"median": 0.610, "p10": 0.610, "p90": 0.611, "spread_pct": 0.16, "unit": "us per empty node in a 100-node graph", "runs": 20}
+}

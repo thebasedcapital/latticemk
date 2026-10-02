@@ -1,0 +1,57 @@
+[
+ {
+  "n": 1,
+  "text": "i got 1.64x over llama.cpp on a 2018 quadro RTX 4000. same card, 4-bit weights, lower perplexity. Qwen3-0.6B, batch-1 decode, 579 vs 353 tok/s.\n\nthe trick wasn't a new quantizer. it was one CUDA kernel that stays resident for the whole token.",
+  "image": "publish/charts/speed_vs_llamacpp.png"
+ },
+ {
+  "n": 2,
+  "text": "each decode step is one launch. 36 blocks of 1024 threads stay on the gpu and hand work to each other through flags in global memory. weights are INT4 with GPTQ, the KV cache is fp16. a small rust checker tests every schedule for races and deadlocks before it ships.",
+  "image": null
+ },
+ {
+  "n": 3,
+  "text": "the win shrinks as the work gets heavier. on 0.6B it's 1.64x at 128 tokens of context, 1.47x at 2k, 1.18x at 8k. on Qwen3-1.7B it's 1.27x, 1.22x, 1.09x.\n\nsmall models burn time on kernel launches. bigger ones mostly stream weights, and nobody skips that.",
+  "image": "publish/charts/roofline.png"
+ },
+ {
+  "n": 4,
+  "text": "quality is measured with llama.cpp's own perplexity tool, wikitext-2 at 2048 context. my INT4 weights score 12.44 vs 12.96 for Q4_0 on 0.6B, and 9.24 vs 9.71 on 1.7B.\n\nQ4_K_M beats my perplexity on both models, so i don't claim that comparison.",
+  "image": null
+ },
+ {
+  "n": 5,
+  "text": "this started as a lattice quantizer project. i wanted simplex-lattice weight codes near 2.4 bits.\n\nthen i measured the weights. after per-group scaling they're gaussian to within 0.0005 bits of entropy. shannon says matching INT4's error needs at least 3.49 bits. dead idea.",
+  "image": "publish/charts/waves.png"
+ },
+ {
+  "n": 6,
+  "text": "my first megakernel was slower than plain CUDA graphs, 0.96x.\n\na persistent kernel gets the registers of its heaviest task. mine got 214, which left 8 warps per SM to hide memory latency. rewriting it to fit 64 registers at 1024 threads per block turned it into a 1.42x win.",
+  "image": null
+ },
+ {
+  "n": 7,
+  "text": "compressing the KV cache didn't pay either. at 8k context my 6.25-bit cache read 573 MB less per token and ran at 0.72x. that kernel also failed my correctness gate, so treat the speed as rough.\n\nllama.cpp's q8_0 cache is slower than f16 on this card too.",
+  "image": null
+ },
+ {
+  "n": 8,
+  "text": "swapping grid-wide barriers for fine-grained flags lost too, 0.93x.\n\nthe first version also had a race. my schedule checker passed it, because the schedule was right and the kernel didn't implement it. runs that disagreed with each other caught it.",
+  "image": null
+ },
+ {
+  "n": 9,
+  "text": "porting to 1.7B broke the math. accumulating dot products in fp16 worked on 0.6B. on 1.7B it drifted to a 24.6 logit error and then produced NaNs.\n\nfp32 accumulation fixed it, with 0.05 max error against an fp32 reference, still 64 registers and no spills.",
+  "image": null
+ },
+ {
+  "n": 10,
+  "text": "i also hit two bugs in ExLlamaV2 0.3.2 with qwen3. it runs the per-head q/k norm as LayerNorm instead of RMSNorm, and its SDPA prefill path drops the causal mask. first-window perplexity was 59.5 vs 9.64 in HF.\n\nconfig overrides fix both. fixed EXL2 still ran 3-6x slower here.",
+  "image": "publish/charts/ppl_vs_speed.png"
+ },
+ {
+  "n": 11,
+  "text": "how i kept this honest. clocks can't be locked on this card, so every ratio comes from alternating both engines in one process. correctness is checked token by token against an fp32 reference, and logits must repeat bit for bit across runs.",
+  "image": null
+ }
+]

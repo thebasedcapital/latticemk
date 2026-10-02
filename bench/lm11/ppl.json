@@ -1,0 +1,16 @@
+{
+  "protocol": "llama-perplexity -c 2048 -ngl 99 -b 2048 -ub 512 --no-warmup -lv 1 -f baselines/wikitext-2-test.txt, 146 windows, score second half",
+  "hf_protocol": "bench/lm11/ppl_llama_protocol.py fp16 --half-only; identical WikiText-2 tokens, 2048-token windows and second-half positions, HF fp16 arithmetic",
+  "llama_commit": "6011c34ce6099646ccdf0d39a61c6e681477c178",
+  "ppl": {
+    "f16/f16": 11.2106,
+    "hf-fp16/f16": 11.2031,
+    "q8_0/f16": 11.226,
+    "q4_0/f16": 12.9617,
+    "q4_k_m/f16": 12.1664,
+    "q4_k_m/q8_0+q8_0": 12.1658,
+    "q4_k_m/q4_0+q4_0": 49.3823,
+    "int4rtn-fake/f16": 14.6557,
+    "int4gptq-fake/f16": 12.4435
+  }
+}

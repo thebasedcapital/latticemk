@@ -1,0 +1,68 @@
+{
+  "gate": "v2.1",
+  "forced_sequences": "GPTQ HF greedy, 3x64",
+  "gptq": {
+    "max_diff": 0.21141767501831055,
+    "per_prompt": [
+      0.09172916412353516,
+      0.21141767501831055,
+      0.09268307685852051
+    ],
+    "near_ties": [
+      {
+        "prompt": 0,
+        "step": 5,
+        "margin": 0.023174285888671875,
+        "step_max_diff": 0.07291984558105469,
+        "mine": 9856,
+        "reference": 279
+      }
+    ],
+    "hard_flips": [],
+    "bitwise_repeat": true,
+    "max_repeat_diff": 0.0
+  },
+  "gptq_repeat": {
+    "max_diff": 0.21141767501831055,
+    "per_prompt": [
+      0.09172916412353516,
+      0.21141767501831055,
+      0.09268307685852051
+    ],
+    "near_ties": [
+      {
+        "prompt": 0,
+        "step": 5,
+        "margin": 0.023174285888671875,
+        "step_max_diff": 0.07291984558105469,
+        "mine": 9856,
+        "reference": 279
+      }
+    ],
+    "hard_flips": [],
+    "bitwise_repeat": true,
+    "max_repeat_diff": 0.0
+  },
+  "rtn_baseline": {
+    "max_diff": 0.23190879821777344,
+    "per_prompt": [
+      0.12340974807739258,
+      0.23190879821777344,
+      0.10051679611206055
+    ],
+    "near_ties": [
+      {
+        "prompt": 1,
+        "step": 6,
+        "margin": 0.017061233520507812,
+        "step_max_diff": 0.06372451782226562,
+        "mine": 2651,
+        "reference": 366
+      }
+    ],
+    "hard_flips": [],
+    "bitwise_repeat": true,
+    "max_repeat_diff": 0.0
+  },
+  "pass": true
+}

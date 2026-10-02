@@ -1,0 +1,29 @@
+{
+  "gate": "v2.1",
+  "reference": "CPU HF fp32 fake-GPTQ",
+  "forced_sequences": "HF greedy 3x64",
+  "first": {
+    "max_diff": 0.051537513732910156,
+    "per_prompt": [
+      0.040083885192871094,
+      0.051537513732910156,
+      0.03659629821777344
+    ],
+    "near_ties": [],
+    "hard_flips": [],
+    "nonfinite_steps": 0,
+    "bitwise_repeat": true
+  },
+  "second": {
+    "max_diff": 0.051537513732910156,
+    "bitwise_repeat": true,
+    "nonfinite_steps": 0
+  },
+  "fp16_dot_diagnostic": {
+    "max_finite_diff": 24.61760902404785,
+    "nonfinite_steps": 21,
+    "near_ties": 74,
+    "hard_flips": 21
+  },
+  "pass": true
+}

@@ -1,0 +1,252 @@
+{
+  "128": {
+    "mk2p": {
+      "sm_clock_before_mhz": 1005,
+      "sm_clock_after_mhz": 1005,
+      "trace_span_us": 2463.104,
+      "qkv": {
+        "max_cta_work_us_sum": 399.264,
+        "max_cta_wait_us_sum": 82.4,
+        "phase_wall_us_sum": 449.856,
+        "barrier_release_tail_us_sum": 44.896,
+        "layers": 28
+      },
+      "attn": {
+        "max_cta_work_us_sum": 267.488,
+        "max_cta_wait_us_sum": 288.416,
+        "phase_wall_us_sum": 309.984,
+        "barrier_release_tail_us_sum": 40.192,
+        "layers": 28,
+        "half0_mean_us": 8.804214285714286,
+        "half1_mean_us": 8.97892857142857,
+        "half0_max_us": 10.464,
+        "half1_max_us": 10.56
+      },
+      "o": {
+        "max_cta_work_us_sum": 420.384,
+        "max_cta_wait_us_sum": 93.92,
+        "phase_wall_us_sum": 478.528,
+        "barrier_release_tail_us_sum": 43.424,
+        "layers": 28
+      },
+      "gu": {
+        "max_cta_work_us_sum": 520.48,
+        "max_cta_wait_us_sum": 106.656,
+        "phase_wall_us_sum": 576.928,
+        "barrier_release_tail_us_sum": 45.952,
+        "layers": 28
+      },
+      "down": {
+        "max_cta_work_us_sum": 354.336,
+        "max_cta_wait_us_sum": 94.56,
+        "phase_wall_us_sum": 418.016,
+        "barrier_release_tail_us_sum": 46.4,
+        "layers": 28
+      },
+      "lm": {
+        "max_cta_work_us_sum": 282.016,
+        "max_cta_wait_us_sum": 7.488,
+        "phase_wall_us_sum": 284.416,
+        "barrier_release_tail_us_sum": 2.304,
+        "layers": 1
+      },
+      "argp": {
+        "max_cta_work_us_sum": 3.392,
+        "max_cta_wait_us_sum": 2.048,
+        "phase_wall_us_sum": 5.088,
+        "barrier_release_tail_us_sum": 0.736,
+        "layers": 1
+      },
+      "argc": {
+        "max_cta_work_us_sum": 2.016,
+        "max_cta_wait_us_sum": 3.424,
+        "phase_wall_us_sum": 3.424,
+        "barrier_release_tail_us_sum": 1.408,
+        "layers": 1
+      }
+    },
+    "mk3": {
+      "sm_clock_before_mhz": 1005,
+      "sm_clock_after_mhz": 1005,
+      "trace_span_us": 2771.84,
+      "qkv": {
+        "max_cta_work_us_sum": 439.136,
+        "max_cta_wait_us_sum": 96.256,
+        "phase_wall_us_sum": 439.616,
+        "barrier_release_tail_us_sum": null,
+        "layers": 28
+      },
+      "attn": {
+        "max_cta_work_us_sum": 354.144,
+        "max_cta_wait_us_sum": 122.24,
+        "phase_wall_us_sum": 441.664,
+        "barrier_release_tail_us_sum": null,
+        "layers": 28,
+        "half0_mean_us": 11.993642857142857,
+        "half1_mean_us": 12.096428571428572,
+        "half0_max_us": 13.76,
+        "half1_max_us": 13.856
+      },
+      "o": {
+        "max_cta_work_us_sum": 444.832,
+        "max_cta_wait_us_sum": 407.072,
+        "phase_wall_us_sum": 457.792,
+        "barrier_release_tail_us_sum": null,
+        "layers": 28
+      },
+      "gu": {
+        "max_cta_work_us_sum": 584.992,
+        "max_cta_wait_us_sum": 96.416,
+        "phase_wall_us_sum": 596.768,
+        "barrier_release_tail_us_sum": null,
+        "layers": 28
+      },
+      "down": {
+        "max_cta_work_us_sum": 410.816,
+        "max_cta_wait_us_sum": 53.536,
+        "phase_wall_us_sum": 414.144,
+        "barrier_release_tail_us_sum": null,
+        "layers": 28
+      },
+      "lm": {
+        "max_cta_work_us_sum": 313.344,
+        "max_cta_wait_us_sum": 2.048,
+        "phase_wall_us_sum": 313.344,
+        "barrier_release_tail_us_sum": null,
+        "layers": 1
+      },
+      "argc": {
+        "max_cta_work_us_sum": 4.064,
+        "max_cta_wait_us_sum": 4.608,
+        "phase_wall_us_sum": 8.416,
+        "barrier_release_tail_us_sum": null,
+        "layers": 1
+      }
+    }
+  },
+  "8192": {
+    "mk2p": {
+      "sm_clock_before_mhz": 1005,
+      "sm_clock_after_mhz": 1005,
+      "trace_span_us": 6952.288,
+      "qkv": {
+        "max_cta_work_us_sum": 423.36,
+        "max_cta_wait_us_sum": 85.824,
+        "phase_wall_us_sum": 474.4,
+        "barrier_release_tail_us_sum": 43.264,
+        "layers": 28
+      },
+      "attn": {
+        "max_cta_work_us_sum": 4652.256,
+        "max_cta_wait_us_sum": 4696.32,
+        "phase_wall_us_sum": 4716.512,
+        "barrier_release_tail_us_sum": 45.44,
+        "layers": 28,
+        "half0_mean_us": 164.07064285714287,
+        "half1_mean_us": 163.58564285714286,
+        "half0_max_us": 168.192,
+        "half1_max_us": 167.904
+      },
+      "o": {
+        "max_cta_work_us_sum": 429.024,
+        "max_cta_wait_us_sum": 98.56,
+        "phase_wall_us_sum": 489.984,
+        "barrier_release_tail_us_sum": 47.072,
+        "layers": 28
+      },
+      "gu": {
+        "max_cta_work_us_sum": 533.632,
+        "max_cta_wait_us_sum": 108.64,
+        "phase_wall_us_sum": 591.392,
+        "barrier_release_tail_us_sum": 43.968,
+        "layers": 28
+      },
+      "down": {
+        "max_cta_work_us_sum": 382.272,
+        "max_cta_wait_us_sum": 69.408,
+        "phase_wall_us_sum": 433.6,
+        "barrier_release_tail_us_sum": 45.696,
+        "layers": 28
+      },
+      "lm": {
+        "max_cta_work_us_sum": 301.152,
+        "max_cta_wait_us_sum": 11.616,
+        "phase_wall_us_sum": 304.608,
+        "barrier_release_tail_us_sum": 3.456,
+        "layers": 1
+      },
+      "argp": {
+        "max_cta_work_us_sum": 3.712,
+        "max_cta_wait_us_sum": 3.424,
+        "phase_wall_us_sum": 7.52,
+        "barrier_release_tail_us_sum": 2.208,
+        "layers": 1
+      },
+      "argc": {
+        "max_cta_work_us_sum": 1.984,
+        "max_cta_wait_us_sum": 3.456,
+        "phase_wall_us_sum": 3.456,
+        "barrier_release_tail_us_sum": 1.472,
+        "layers": 1
+      }
+    },
+    "mk3": {
+      "sm_clock_before_mhz": 1005,
+      "sm_clock_after_mhz": 1275,
+      "trace_span_us": 7145.504,
+      "qkv": {
+        "max_cta_work_us_sum": 423.2,
+        "max_cta_wait_us_sum": 96.32,
+        "phase_wall_us_sum": 423.424,
+        "barrier_release_tail_us_sum": null,
+        "layers": 28
+      },
+      "attn": {
+        "max_cta_work_us_sum": 4852.992,
+        "max_cta_wait_us_sum": 117.856,
+        "phase_wall_us_sum": 4950.272,
+        "barrier_release_tail_us_sum": null,
+        "layers": 28,
+        "half0_mean_us": 171.1059285714286,
+        "half1_mean_us": 170.4545,
+        "half0_max_us": 181.44,
+        "half1_max_us": 181.568
+      },
+      "o": {
+        "max_cta_work_us_sum": 417.12,
+        "max_cta_wait_us_sum": 4915.808,
+        "phase_wall_us_sum": 433.088,
+        "barrier_release_tail_us_sum": null,
+        "layers": 28
+      },
+      "gu": {
+        "max_cta_work_us_sum": 566.336,
+        "max_cta_wait_us_sum": 84.544,
+        "phase_wall_us_sum": 577.92,
+        "barrier_release_tail_us_sum": null,
+        "layers": 28
+      },
+      "down": {
+        "max_cta_work_us_sum": 399.904,
+        "max_cta_wait_us_sum": 51.392,
+        "phase_wall_us_sum": 402.688,
+        "barrier_release_tail_us_sum": null,
+        "layers": 28
+      },
+      "lm": {
+        "max_cta_work_us_sum": 281.12,
+        "max_cta_wait_us_sum": 1.824,
+        "phase_wall_us_sum": 281.184,
+        "barrier_release_tail_us_sum": null,
+        "layers": 1
+      },
+      "argc": {
+        "max_cta_work_us_sum": 2.464,
+        "max_cta_wait_us_sum": 3.648,
+        "phase_wall_us_sum": 8.832,
+        "barrier_release_tail_us_sum": null,
+        "layers": 1
+      }
+    }
+  }
+}
